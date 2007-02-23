@@ -1,0 +1,13 @@
+emotedef:
+names:  lookup
+untargetted:
+first: You look up expectantly.
+third: ~ looks up expectantly.
+targetted:
+first: You look up at @ expectantly.
+second: ~ looks up at you expectantly.
+third: ~ looks up at @ expectantly.
+
+
+
+
