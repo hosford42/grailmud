@@ -25,7 +25,7 @@ setup(name = "grailmud",
       packages = find_packages(),
       package_data = {'grailmud.actiondefs': ['emotefile.txt'],
                       'grailmud': ['LICENSE'],
-                      '': ['*.rst', 'test/*']},
+                      '': ['doc/*', 'test/*']},
 
       install_requires = ['durus>=3.6', 'pyparsing', 'twisted',
                           'functional', 'setuptools'],
