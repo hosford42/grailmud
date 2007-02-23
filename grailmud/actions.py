@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 from collections import defaultdict
 import os
 
-actiondefpath = os.getcwd() + '/actiondefs'
+actiondefpath = os.path.join(os.path.dirname(__file__), 'actiondefs')
 
 modulenames = []
 
