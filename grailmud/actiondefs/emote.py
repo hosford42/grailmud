@@ -33,7 +33,7 @@ from grailmud.utils import promptcolour, smartdict, get_from_rooms, \
 from grailmud.strutils import wsnormalise
 from .core import object_pattern
 from grailmud.actiondefs.system import badSyntax, unfoundObject
-import os
+import pkg_resources
 
 class EmoteUntargettedFirst(GameEvent):
 
@@ -189,7 +189,7 @@ def yank_emotes(emotefile):
             yield name, function
 
 def get_dict_definitions(emotefile):
-    '''This transforms a file of emote definitions into a list of dictionaries.
+    '''This transforms a list of emote definitions into a list of dictionaries.
     '''
     pass #XXX
 
@@ -198,8 +198,8 @@ def register(cdict):
     cdict['emoteto'] = emoteToWrapper
     cdict['emote,'] = emoteToWrapper
 
-    emotefile = open(os.path.join(os.path.dirname(__file__), "emotefile.txt"))
-    for name, yanked_emote in yank_emotes:
+    emotefile = pkg_resources.resource_string(__name__, "emotefile.txt")
+    for name, yanked_emote in yank_emotes(emotefile.splitlines()):
         cdict[name] = yanked_emote
         yanked_emotes[name] = yanked_emote.send_out_events
     

@@ -27,7 +27,7 @@ setup(name = "grailmud",
                       'grailmud': ['LICENSE'],
                       '': ['doc/*', 'test/*']},
       #we do some hacking of the directories, so we're not zipsafe.
-      zip_safe = False,
+#      zip_safe = False,
 
 #      install_requires = ['durus>=3.6', 'pyparsing', 'twisted',
 #                          'functional', 'setuptools'],

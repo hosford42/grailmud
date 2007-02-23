@@ -25,7 +25,8 @@ import pkg_resources
 modulenames = []
 
 for filename in pkg_resources.resource_listdir(__name__, 'actiondefs'):
-    package = pkg_resources.resource_exists(__name__, 'actiondefs/' + filename)
+    package = pkg_resources.resource_exists(__name__, 'actiondefs/' + filename 
+                                                      + '/__init__.py')
     if filename.endswith('py'):
         module = True
         filename = filename[:-3]
