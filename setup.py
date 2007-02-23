@@ -22,13 +22,10 @@ import os
 
 setup(name = "grailmud",
       version = "0.1a0",
-      package_dir = {'grailmud': os.curdir},
-      packages = ["grailmud", 'grailmud.actiondefs', 'grailmud.npcs',
-                  'grailmud.test', 'grailmud.actiondefs.test', 
-                  'grailmud.doc'],
+      packages = find_packages() + ['grailmud.doc'],
       package_data = {'grailmud.actiondefs': ['emotefile.txt'],
                       'grailmud': ['LICENSE'],
-                      'grailmud.doc': ['*.txt']},
+                      '': ['*.rst', 'test/*']},
 
       install_requires = ['durus>=3.6', 'pyparsing', 'twisted',
                           'functional', 'setuptools'],
