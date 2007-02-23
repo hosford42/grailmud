@@ -22,7 +22,7 @@ import os
 
 setup(name = "grailmud",
       version = "0.1a0",
-      packages = find_packages() + ['grailmud.doc'],
+      packages = find_packages(),
       package_data = {'grailmud.actiondefs': ['emotefile.txt'],
                       'grailmud': ['LICENSE'],
                       '': ['*.rst', 'test/*']},
