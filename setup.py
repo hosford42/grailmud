@@ -23,12 +23,12 @@ import os
 setup(name = "grailmud",
       version = "0.1a0",
       packages = find_packages(),
-      package_data = {'grailmud.actiondefs': ['emotefile.txt'],
+      package_data = {'grailmud.actiondefs': ['*.py', 'emotefile.txt'],
                       'grailmud': ['LICENSE'],
                       '': ['doc/*', 'test/*']},
 
-      install_requires = ['durus>=3.6', 'pyparsing', 'twisted',
-                          'functional', 'setuptools'],
+#      install_requires = ['durus>=3.6', 'pyparsing', 'twisted',
+#                          'functional', 'setuptools'],
       extras_require = {'rest': ['docutils']},
 
       author = "Sam Pointon",
