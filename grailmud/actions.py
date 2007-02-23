@@ -20,15 +20,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 """
 
 from collections import defaultdict
-import os
-
-actiondefpath = os.path.join(os.path.dirname(__file__), 'actiondefs')
+import pkg_resources
 
 modulenames = []
 
-for filename in os.listdir(actiondefpath):
-    package = os.access(os.path.join(actiondefpath, filename, "__init__.py"),
-                                     os.F_OK)
+for filename in pkg_resources.resource_listdir(__name__, 'actiondefs'):
+    package = pkg_resources.resource_exists(__name__, 'actiondefs/' + filename)
     if filename.endswith('py'):
         module = True
         filename = filename[:-3]
