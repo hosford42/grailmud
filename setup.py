@@ -40,6 +40,6 @@ setup(name = "grailmud",
                ["License :: OSI Approved :: GNU General Public License (GPL)",
                 "Operating System :: OS Independent",
                 "Programming Language :: Python",
-                "Topic :: Communications :: Chat"
+                "Topic :: Communications :: Chat",
                 "Topic :: Games/Entertainment :: Multi-User Dungeons (MUD)"]
 )
