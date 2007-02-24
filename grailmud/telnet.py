@@ -52,7 +52,6 @@ class LoggerIn(Telnet, LineOnlyReceiver):
         #LineOnlyReceiver doesn't have an __init__ method, weirdly.
         self.callback = lambda line: logging.debug("Doing nothing with %s" %
                                                    line)
-        self.connection_state = None
         self.avatar = None
         self.connection_lost_callback = lambda: None
 
@@ -108,9 +107,6 @@ class ConnectionHandler(object):
 
     def write(self, text):
         self.telnet.write(text)
-
-    def setstate(self, state):
-        self.telnet.linecallback = getattr(self, 'line_%s' % state)
 
     def setcallback(self, func):
         self.telnet.callback = func
