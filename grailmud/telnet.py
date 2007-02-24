@@ -166,9 +166,11 @@ class ChoiceHandler(ConnectionHandler):
         """
         logging.debug("ChoiceHandler.choice_made called.")
         if opt == NEW_CHARACTER:
-            CreationHandler(self.telnet)
+            self.successor = CreationHandler(self.telnet)
         elif opt == LOGIN:
-            LoginHandler(self.telnet)
+            self.successor = LoginHandler(self.telnet)
+        else:
+            self.write("That is not a valid option.")
 
 class CreationHandler(ConnectionHandler):
 
@@ -243,7 +245,7 @@ class CreationHandler(ConnectionHandler):
         avatar = Player(self.name, self.sdesc, self.adjs, get_actions(),
                         grailmud.instance.startroom, self.passhash)
         self.unlock_name()
-        AvatarHandler(self.telnet, avatar)
+        self.successor = AvatarHandler(self.telnet, avatar)
 
     def unlock_name(self):
         """Remove our lock on the name, either because it's been created or
@@ -286,7 +288,7 @@ class LoginHandler(ConnectionHandler):
             self.write("That password is invalid. Goodbye!")
             self.telnet.connectionLost(err)
         else:
-            AvatarHandler(self.telnet, avatar)
+            self.successor = AvatarHandler(self.telnet, avatar)
 
 class AvatarHandler(ConnectionHandler):
 
