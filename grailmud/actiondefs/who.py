@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 from grailmud.cleanimporter import CleanImporter
 from grailmud.events import BaseEvent
 from grailmud.utils import promptcolour
+from pyparsing import ParseException
 
 class WhoHereEvent(BaseEvent):
 
@@ -37,6 +38,9 @@ class WhoHereEvent(BaseEvent):
         state.sendEventLine(', '.join(obj.sdesc for obj in self.objects))
 
 class WhoEvent(BaseEvent):
+
+    def __init__(self, actor):
+        self.actor = actor
 
     @promptcolour("speech")
     def collapseToText(self, state, obj):
