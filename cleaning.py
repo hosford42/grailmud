@@ -20,10 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 import os
 
 def get_all_files_from_subdirs(directory):
-    print 'Entering %s' % directory
     for filename in os.listdir(directory):
-        filename = os.path.join(directory, filename)
         if filename != '.svn':
+            filename = os.path.join(directory, filename)
             if os.path.isdir(filename):
                 for name in get_all_files_from_subdirs(filename):
                     yield name
