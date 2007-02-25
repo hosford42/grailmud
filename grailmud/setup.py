@@ -22,7 +22,8 @@ import os
 
 setup(name = "grailmud",
       version = "0.1a1",
-      packages = find_packages(),
+      packages = ['grailmud'],
+      package_dir = {'grailmud': ''},
       package_data = {'grailmud.actiondefs': ['*.py', 'emotefile.txt'],
                       'grailmud': ['LICENSE'],
                       '': ['doc/*', 'test/*']},
