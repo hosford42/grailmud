@@ -26,7 +26,7 @@ from functional import compose
 from hashlib import sha512 as sha
 from twisted.conch.telnet import Telnet
 from twisted.protocols.basic import LineOnlyReceiver
-from grailmud.objects import Player, BadPassword, TargettableObject
+from grailmud.objects import Player, BadPassword, NamedObject
 from grailmud.actions import get_actions
 from grailmud.actiondefs.logoff import logoffFinal
 from grailmud.actiondefs.login import login
@@ -34,6 +34,7 @@ from grailmud.listeners import ConnectionState
 from grailmud.strutils import sanitise, alphatise, safetise, articleise, \
                             wsnormalise
 import grailmud
+from functools import wraps
 
 #some random vaguely related TODOs:
 #-referential integrity when MUDObjects go POOF
@@ -133,6 +134,7 @@ def strconstrained(blankallowed = False, corrector = sanitise,
     input.
     """
     def constrained(fn):
+        @wraps(fn)
         def checker(self, line):
             logging.debug("Constraining input (%r) to %r" % (line, fn))
             try:
@@ -192,7 +194,7 @@ class CreationHandler(ConnectionHandler):
         so we ask for the password.
         """
         name = name.lower()
-        if name in TargettableObject._name_registry or \
+        if name in NamedObject._name_registry or \
            name in CreationHandler.creating_right_now:
             self.write("That name is taken. Please use another.")
         else:

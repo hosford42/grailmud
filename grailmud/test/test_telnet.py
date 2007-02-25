@@ -70,7 +70,7 @@ def test_ConnectionHandler_setcallback():
 
 #XXX: tests for strconstrained
 
-from grailmud.telnet import ChoiceHandler
+from grailmud.telnet import ChoiceHandler, LoginHandler
 
 def test_ChoiceHandler_initial():
     telnet = MockTelnet()
@@ -82,12 +82,14 @@ def test_ChoiceHandler_choice_made_new_character():
     telnet = MockTelnet()
     ch = ChoiceHandler(telnet)
     ch.choice_made("1")
+    assert isinstance(ch.successor, CreationHandler)
     assert telnet.callback == ch.successor.get_name
 
 def test_ChoiceHandler_choice_made_login():
     telnet = MockTelnet()
     ch = ChoiceHandler(telnet)
     ch.choice_made("2")
+    assert isinstance(ch.successor, LoginHandler)
     assert telnet.callback == ch.successor.get_name
 
 def test_ChoiceHandler_choice_made_bad_input():
@@ -99,9 +101,25 @@ def test_ChoiceHandler_choice_made_bad_input():
 
 from grailmud.telnet import CreationHandler
 
-def test_CreationHandler_initialisation():
-    telnet = MockTelnet()
-    ch = CreationHandler(telnet)
-    assert telnet.callback == ch.get_name
+class TestCreationhandler:
+    def setUp(self):
+        self.telnet = MockTelnet()
+        self.ch = CreationHandler(self.telnet)
+
+    def test_CreationHandler_initialisation(self):
+        assert self.telnet.callback == self.ch.get_name
+
+    def test_CreationHandler_get_name_setting(self):
+        self.ch.get_name("foo")
+        assert self.ch.name == "foo"
+
+    def test_CreationHandler_name_with_numbers_failure(self):
+        self.ch.get_name("foo3290")
+        assert self.telnet.callback == self.ch.get_name
+
+    def test_CreationHandler_get_name_success(self):
+        self.ch.get_name("foobarbaz")
+        print self.telnet.callback
+        assert self.telnet.callback == self.ch.get_password
 
 #XXX: more tests
