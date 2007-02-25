@@ -21,7 +21,7 @@ from setuptools import setup, find_packages
 import os
 
 setup(name = "grailmud",
-      version = "0.1a0",
+      version = "0.1a1",
       packages = find_packages(),
       package_data = {'grailmud.actiondefs': ['*.py', 'emotefile.txt'],
                       'grailmud': ['LICENSE'],
