@@ -1,11 +1,11 @@
 import os
 
-def main(directory):
+def discover_untested(directory):
     for rawfilename in os.listdir(directory):
         if rawfilename not in ('.svn', 'test'):
             filename = os.path.join(directory, rawfilename)
             if os.path.isdir(filename):
-                main(filename)
+                discover_untested(filename)
             elif filename.endswith('.py'):
                 if not os.access(os.path.join(directory, 'test', 
                                               'test_%s' % rawfilename), 
@@ -14,5 +14,5 @@ def main(directory):
                         print '%s not tested!' % filename
 
 if __name__ == '__main__':
-    main(os.path.join(os.curdir, 'grailmud'))
+    discover_untested(os.path.join(os.curdir, 'grailmud'))
 
