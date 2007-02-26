@@ -200,7 +200,8 @@ class InstanceVariableFactoryObject(object):
                         setattr(self, attr, res)
                         return res
 
-                if not any((attr in cls.__dict__) for cls in type(self).__mro__):
+                if not any((attr in cls.__dict__) 
+                            for cls in type(self).__mro__):
                     raise AttributeError()
             
         return object.__getattribute__(self, attr)

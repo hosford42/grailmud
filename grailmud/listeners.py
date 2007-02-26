@@ -62,8 +62,8 @@ def chunked_event(self):
     return None
 
 class ConnectionState(Listener):
-    """Represents the state of the connection to the events as they collapse to
-    text."""
+    """Represents the state of the connection to the events as they collapse 
+    to text."""
 
     _pickleme = False
 
@@ -115,12 +115,13 @@ class ConnectionState(Listener):
         self.forceNewline()
 
     def sendEventData(self, data):
-        """Write a blob of data to the telnet connection. Sets self.on_prompt to
-        False, and on_newline to the appropriate value.
+        """Write a blob of data to the telnet connection. Sets self.on_prompt 
+        to False, and on_newline to the appropriate value.
         """
         #TODO: when colours are implemented (itself a fairly major TODO), this
-        #will have to check through the data for newlines and add in the current
-        #colour information if it is chunked, because otherwise it may be lost.
+        #will have to check through the data for newlines and add in the 
+        #current colour information if it is chunked, because otherwise it may
+        #be lost.
         self.target.write(data)
         logging.debug("%r written." % data)
         self.on_prompt = False

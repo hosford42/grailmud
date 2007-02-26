@@ -84,10 +84,10 @@ class Signature(object):
         
         z = zip(self.tsig, other.tsig)
         #Is it just me, or is the argument order for issubclass completely
-        #arbitrary? I've tripped up on that so many times - my preferred method
-        #of turning it into a Haskell style infix thingy and then reading it
-        #aloud ("b `issubclass` a") doesn't help. I think it ought to be renamed
-        #'issubclassof' and the argument order reversed.
+        #arbitrary? I've tripped up on that so many times - my preferred 
+        #method of turning it into a Haskell style infix thingy and then 
+        #reading it aloud ("b `issubclass` a") doesn't help. I think it ought 
+        #to be renamed 'issubclassof' and the argument order reversed.
         if all(_cooler_issubclass(theirs, ours) for ours, theirs in z):
             return True
 
@@ -108,8 +108,8 @@ class Signature(object):
         return self.tsig == other.tsig
 
 class Multimethod(object):
-    '''A function that can dispatch based on the types of all its arguments, not
-    just the first one, like it is traditionally.
+    '''A function that can dispatch based on the types of all its arguments, 
+    not just the first one, like it is traditionally.
     '''
 
     def __init__(self):
@@ -184,11 +184,11 @@ class Multimethod(object):
         """Construct an iterator over all the matching functions for the given
         signature.
         """
-        #Here comes the clever bit: self.signatures is stored in a sorted order,
-        #going from most to least specific type signatures, so we can simply
-        #iterate through it comparing our signature with its elements and use
-        #the functions whose signatures match. The beauty of using a generator
-        #for this is that we can be lazy about it.
+        #Here comes the clever bit: self.signatures is stored in a sorted 
+        #order, going from most to least specific type signatures, so we can 
+        #simply iterate through it comparing our signature with its elements 
+        #and use the functions whose signatures match. The beauty of using a 
+        #generator for this is that we can be lazy about it.
         for sig in self.signatures:
             if sig.supertypes(csig):
                 for func in self.s2fs[sig]:

@@ -38,7 +38,7 @@ class ConnectionFactory(Factory):
         Room.prefab_instances(self.root['all_rooms'])
         MUDObject.prefab_instances(self.root['all_objects'])
         TargettableObject._name_registry = \
-                                       self.root['targettable_objects_by_name']
+                                      self.root['targettable_objects_by_name']
     
     def buildProtocol(self, address):
         prot = self.protocol()

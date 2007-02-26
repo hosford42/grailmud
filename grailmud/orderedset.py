@@ -160,8 +160,8 @@ class OrderedSet(list):
         return res
 
     def difference(self, other):
-        '''Return the elements that do not appear in the other operand which do
-        appear in this one.
+        '''Return the elements that do not appear in the other operand which 
+        do appear in this one.
         '''
         res = OrderedSet()
         other = list(other)
@@ -271,8 +271,8 @@ class OrderedSet(list):
     
     #Should equality just test for membership (ie, set-style), or should
     #position count as well (list-style)? Of course, I could always do
-    #dispatching to sniff out sets and compare them according to set rules, and
-    #then use the list style on everything else.
+    #dispatching to sniff out sets and compare them according to set rules, 
+    #and then use the list style on everything else.
     #The problem here is that __eq__ is overloaded, with two fundamentally
     #different operations. What would be more handy is two wholly separate
     #comparison functions. Then, code writers could pick and choose.

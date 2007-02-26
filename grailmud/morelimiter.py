@@ -32,8 +32,8 @@ def indnum(string, target, num):
     return ind
 
 class MoreLimiter(object):
-    """A recorder of what the limit is, and a producer of Chunkers that actually
-    limit the data.
+    """A recorder of what the limit is, and a producer of Chunkers that 
+    actually limit the data.
     """
 
     def __init__(self, limit):

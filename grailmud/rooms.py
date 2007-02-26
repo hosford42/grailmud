@@ -41,8 +41,8 @@ class AnonyRoom(InstanceTracker):
         self.contents.add(obj)
 
     def remove(self, obj):
-        """Remove an object from the room. Does not modify the object to reflect
-        this.
+        """Remove an object from the room. Does not modify the object to 
+        reflect this.
         """
         self.contents.remove(obj)
 

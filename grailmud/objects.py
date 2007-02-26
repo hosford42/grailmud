@@ -63,7 +63,8 @@ class MUDObject(BothAtOnce):
         listener.register(self)
 
     def removeListener(self, listener):
-        """Remove a listener. Throws errors if it's not currently listening."""
+        """Remove a listener. Throws errors if it's not currently listening.
+        """
         if listener not in self.listeners:
             raise ValueError("Listener is not listening.")
         self.listeners.remove(listener)

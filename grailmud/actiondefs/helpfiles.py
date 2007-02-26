@@ -70,7 +70,7 @@ def register(cdict):
 
 def help_register(hdict):
     hdict['help'] = \
-        'Just type HELP <phrase> to look up the help for it. A search will be '\
-        'implemented someday.'
+        'Just type HELP <phrase> to look up the help for it. A search will ' \
+        'be implemented someday.'
     
 hdict = {}
