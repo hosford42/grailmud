@@ -1,3 +1,4 @@
 cd grailmud
-python setup.py bdist --formats=zip,gztar,wininst,egg
+python setup.py bdist --formats=wininst,egg -d ../dist
+python setup.py sdist -d ../dist
 cd ..
