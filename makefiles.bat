@@ -1,4 +1,1 @@
-cd grailmud
-python setup.py bdist --formats=wininst,egg -d ../dist
-python setup.py sdist -d ../dist
-cd ..
+python grailmud/setup.py bdist_wininst bdist_egg sdist
