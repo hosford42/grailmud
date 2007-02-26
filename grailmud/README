@@ -1,4 +1,5 @@
-``grailmud`` is a Python MUD server.
+``grailmud`` is a Python MUD server. A more full advocacy and description is 
+in ``doc/whatis.rst``.
 
 Installation
 ============
