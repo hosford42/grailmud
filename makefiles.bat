@@ -1,3 +1,3 @@
 cd grailmud
-python setup.py bdist_wininst bdist_egg sdist -d ../dist 
+python setup.py bdist_wininst -d ../dist bdist_egg -d ../dist sdist -d ../dist
 cd ..

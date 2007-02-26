@@ -1,0 +1,40 @@
+``grailmud`` is a Python MUD server.
+
+Installation
+============
+
+To install the package with all the defaults, execute::
+
+    python setup.py install
+
+in the current directory.
+
+Running ``grailmud``
+====================
+
+Presumably you'll want to customise the game a little, because there is very 
+little in the way of actual game content. However, a very silly, very small
+sample MUD is included: first::
+    
+    create_mudlib.py
+
+to create and initialise the mudlib, and then::
+
+    rungrail.py
+
+to launch the server. It listens on port 6666.
+
+Running the tests
+=================
+
+To run ``grailmud``'s unit testing suite, you need the nose testing tool. With 
+that installed, run::
+
+    nosetests
+
+at the shell in ``grailmud``'s directory.
+
+Author
+======
+
+The author of grailmud is Sam Pointon <free.condiments@gmail.com>.
