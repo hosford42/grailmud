@@ -101,6 +101,9 @@ class LineInfo(object):
                                            #here too.
         self.instigator = instigator
 
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
 class ConnectionHandler(object):
 
     def __init__(self, telnet):
@@ -300,7 +303,7 @@ class AvatarHandler(ConnectionHandler):
         
         self.connection_state = ConnectionState(self.telnet)
         self.avatar.addListener(self.connection_state)
-        grailmud.instance.startroom.add(self.avatar)
+        self.avatar.room.add(self.avatar)
         login(self.avatar)
         self.connection_state.eventListenFlush(self.avatar)
         self.setcallback(self.handle_line)

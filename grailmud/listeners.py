@@ -170,7 +170,8 @@ class ConnectionState(Listener):
     def disconnecting(self, obj):
         if obj is self.avatar:
             #our avatar is disconnecting: we need to tell our telnet to close.
-            for listening_to in self.listening:
+            #self.listening may be mutated by the listenees removal
+            for listening_to in self.listening.copy():
                 listening_to.removeListener(self)
             logging.debug("Disconnecting the telnet instance.")
             self.telnet.close()

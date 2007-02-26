@@ -19,6 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 
 from grailmud.telnet import LoggerIn, ConnectionHandler
 import grailmud
+from grailmud.rooms import AnonyRoom
 
 class MockTicker:
 
@@ -26,6 +27,7 @@ class MockTicker:
         func()
 
 grailmud.instance.ticker = MockTicker()
+grailmud.instance.startroom = AnonyRoom()
 
 def test_callback_calling():
     l = LoggerIn()
@@ -54,6 +56,9 @@ class MockTelnet:
 
     def write(self, data):
         self.written += data
+
+    def close(self):
+        pass
 
 def test_ConnectionHandler_write():
     telnet = MockTelnet()
@@ -121,5 +126,54 @@ class TestCreationhandler:
         self.ch.get_name("foobarbaz")
         print self.telnet.callback
         assert self.telnet.callback == self.ch.get_password
+
+from grailmud.telnet import AvatarHandler
+from grailmud.objects import Player, NamedObject
+from grailmud.events import BaseEvent
+
+class MockEvent(BaseEvent):
+
+    def collapseToText(self, state, obj):
+        state.sendEventLine("FOOBAR")
+
+class TestAvatarHandler:
+
+    def setUp(self):
+        if 'bob' in NamedObject._name_registry:
+            del NamedObject._name_registry['bob']
+        self.telnet = MockTelnet()
+        self.avatar = self.telnet.avatar = \
+                      Player("bob", "", set(), {}, 
+                             grailmud.instance.startroom, '')
+        self.ah = AvatarHandler(self.telnet, self.avatar)
+
+    def test_initialisation(self):
+        assert self.ah.connection_state in self.avatar.listeners
+        assert self.ah in grailmud.instance.startroom
+        assert self.telnet.callback == self.ah.handle_line
+
+    def test_handle_line_correct(self):
+        called = []
+        self.avatar.receivedLine = (lambda line, info: 
+                                            called.append(('rl', line, info)))
+        self.avatar.eventFlush = lambda: called.append(('ef',))
+        self.ah.handle_line('foo')
+        assert called == [('rl', 'foo', LineInfo(instigator = self.avatar)),
+                          ('ef',)]
+
+    def test_handle_line_removing_bad_characters(self):
+        lines = []
+        self.avatar.receivedLine = lambda *a: lines.append(a)
+        self.ah.handle_line("foo\xff")
+        assert lines == [('foo', LineInfo(instigator = self.avatar))]
+
+    #XXX: not tested: receivedLine/eventFlush raising an error.
+    #XXX: nor is a player popping up outside the startroom
+
+from grailmud.telnet import LineInfo
+
+def test_LineInfo_equality():
+    obj = object()
+    assert LineInfo(instigator = obj) == LineInfo(instigator = obj)
 
 #XXX: more tests

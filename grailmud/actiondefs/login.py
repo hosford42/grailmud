@@ -32,7 +32,7 @@ class LoginThirdEvent(SystemEvent):
     @promptcolour()
     def collapseToText(self, state, obj):
         state.sendEventLine("%s's form appears, and they crackle into life." %
-                            capitalise(self.actor.dsesc))
+                            capitalise(self.actor.sdesc))
 
 class LoginFirstEvent(SystemEvent):
 
