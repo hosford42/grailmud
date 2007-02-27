@@ -1,0 +1,24 @@
+%%(head_prefix)s
+%%(head)s
+%%(stylesheet)s
+%%(body_prefix)s
+<div style = "float: left;
+              background-color: #FFFFCC;
+              margin-right: 15px;
+              padding-bottom: 50px;
+              width: 300px;">
+  <center>
+    <img src = "grail.png" 
+         alt = "The Holy Grail" 
+         width = "75px" 
+         height = "150px" />
+    <br />
+    <span style = "test-align: center;">grailmud doc links</span>
+  </center>
+  <br />
+  %s
+</div>
+%%(body_pre_docinfo)s
+%%(docinfo)s
+%%(body)s
+%%(body_suffix)s
