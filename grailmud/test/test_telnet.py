@@ -118,9 +118,10 @@ class TestCreationhandler:
         self.ch.get_name("foo")
         assert self.ch.name == "foo"
 
-    def test_CreationHandler_name_with_numbers_failure(self):
-        self.ch.get_name("foo3290")
-        assert self.telnet.callback == self.ch.get_name
+    def test_CreationHandler_name_normalisation(self):
+        self.ch.get_name("bar3290")
+        print self.telnet.written
+        assert self.ch.name == "bar"
 
     def test_CreationHandler_get_name_success(self):
         self.ch.get_name("foobarbaz")
