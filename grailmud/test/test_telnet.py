@@ -136,6 +136,22 @@ class MockEvent(BaseEvent):
     def collapseToText(self, state, obj):
         state.sendEventLine("FOOBAR")
 
+def test_AvatarHandler_initialisation_calls_login():
+    def fake_login(actor):
+        actor.login_called = True
+        login(actor)
+
+    from grailmud.actiondefs.login import login
+    from grailmud import telnet
+    telnet.login = fake_login
+
+    mocktelnet = MockTelnet()
+    avatar = mocktelnet.avatar = Player("michael", "", set(), {}, 
+                                        grailmud.instance.startroom, '')
+    ah = AvatarHandler(mocktelnet, avatar)
+
+    assert avatar.login_called
+
 class TestAvatarHandler:
 
     def setUp(self):
@@ -147,9 +163,13 @@ class TestAvatarHandler:
                              grailmud.instance.startroom, '')
         self.ah = AvatarHandler(self.telnet, self.avatar)
 
-    def test_initialisation(self):
+    def test_initialisation_listener_adding(self):
         assert self.ah.connection_state in self.avatar.listeners
+
+    def test_initialisation_room_adding(self):
         assert self.avatar in grailmud.instance.startroom
+
+    def test_initialisation_callback_setting(self):
         assert self.telnet.callback == self.ah.handle_line
 
     def test_handle_line_correct(self):
