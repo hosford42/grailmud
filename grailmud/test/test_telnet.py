@@ -128,6 +128,15 @@ class TestCreationhandler:
         print self.telnet.callback
         assert self.telnet.callback == self.ch.get_password
 
+    def test_get_name_lock_acquiring(self):
+        self.ch.get_name("mike")
+        assert 'mike' in CreationHandler.creating_right_now
+
+    def test_get_name_race_condition_locking(self):
+        CreationHandler.creating_right_now.add('parrot')
+        self.ch.get_name("parrot")
+        assert self.telnet.callback == self.ch.get_name
+
 from grailmud.telnet import AvatarHandler
 from grailmud.objects import Player, NamedObject
 from grailmud.events import BaseEvent
