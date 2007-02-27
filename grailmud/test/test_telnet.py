@@ -149,7 +149,7 @@ class TestAvatarHandler:
 
     def test_initialisation(self):
         assert self.ah.connection_state in self.avatar.listeners
-        assert self.ah in grailmud.instance.startroom
+        assert self.avatar in grailmud.instance.startroom
         assert self.telnet.callback == self.ah.handle_line
 
     def test_handle_line_correct(self):
