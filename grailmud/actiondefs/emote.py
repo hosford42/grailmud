@@ -191,7 +191,32 @@ def yank_emotes(emotefile):
 def get_dict_definitions(emotefile):
     '''This transforms a list of emote definitions into a list of dictionaries.
     '''
-    pass #XXX
+    lines = iter(emotefile.split('\n'))
+    curemote = {'untargetted': {}}
+    for line in lines:
+        if line.startswith('emotedef:'):
+            curemote['names'] = line.partition(':')[2].replace(' ', '').\
+                                                       split(',')
+        if line == 'untargetted':
+            line = lines.next()
+            while line.startswith('first') or line.startswith('third'):
+                part, _, emote = line.partition(':')
+                line = lines.next()
+                curemote['untargetted'][part] = emote.strip()
+        if line == 'targetted':
+            curemote['targetted'] = {}
+            line = lines.next()
+            while line.startswith('first') or line.startswith("second") or \
+                  line.startswith("third"):
+                part, _, emote = line.partition(':')
+                curemote['targetted'][part] = emote.strip()
+                line = lines.next()
+        if not line or line.isspace():
+            if curemote != {'untargetted': {}}:
+                yield curemote
+                curemote = {'untargetted': {}}
+    if curemote != {'untargetted': {}}:
+        yield curemote
 
 def register(cdict):
     cdict['emote'] = emoteWrapper
@@ -199,7 +224,7 @@ def register(cdict):
     cdict['emote,'] = emoteToWrapper
 
     emotefile = pkg_resources.resource_string(__name__, "emotefile.txt")
-    for name, yanked_emote in yank_emotes(emotefile.splitlines()):
+    for name, yanked_emote in yank_emotes(emotefile):
         cdict[name] = yanked_emote
         yanked_emotes[name] = yanked_emote.send_out_events
     
