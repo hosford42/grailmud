@@ -1,7 +1,7 @@
-%%(head_prefix)s
-%%(head)s
-%%(stylesheet)s
-%%(body_prefix)s
+%(head_prefix)s
+%(head)s
+%(stylesheet)s
+%(body_prefix)s
 <div style = "float: left;
               background-color: #FFFFCC;
               margin-right: 15px;
@@ -13,12 +13,12 @@
          width = "75px" 
          height = "150px" />
     <br />
-    <span style = "test-align: center;">grailmud doc links</span>
+    <span style = "test-align: center;">grailmud</span>
   </center>
   <br />
-  %s
+  (links to go here)
 </div>
-%%(body_pre_docinfo)s
-%%(docinfo)s
-%%(body)s
-%%(body_suffix)s
+%(body_pre_docinfo)s
+%(docinfo)s
+%(body)s
+%(body_suffix)s
