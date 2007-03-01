@@ -99,7 +99,7 @@ def deaf_default(self):
 def receiveEvent(self, event):
     """Ignore sound events for deaf things."""
     if not self.deaf:
-        MUDObject.receiveEvent.call_next_method()
+        MUDObject.receiveEvent.call_next_method(self, event)
 
 def register(cdict):
     cdict['deaf'] = deafDistributor

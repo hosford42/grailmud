@@ -1,0 +1,23 @@
+====================================
+The stuff what does need doing
+====================================
+
+For 0.1
+=======
+
+* Test ``telnet.py``, ``objects.py``, ``listeners.py`` and ``rooms.py`` as
+completely as possible.
+
+* Test ``actiondefs/login.py`` and ``actiondefs/logoff.py`` a bit.
+
+For 0.2
+=======
+
+* A proper object relational integrity system, possibly with querying. There is
+prior art here; SQLAlchemy, SQLObject, ZCatalog, et al.
+
+Just nice to have
+=================
+
+* More documentation. Particularly, tutorials and high-level descriptions might
+be nice.

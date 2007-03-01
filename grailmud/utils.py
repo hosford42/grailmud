@@ -187,7 +187,6 @@ class _DefaultInstanceVariable(object):
         self.fn = fn
 
     def __get__(self, instance, owner):
-        print '__get__ called with %r, %r, %r' % (self, owner, instance)
         if instance is None:
             raise AttributeError()
         if self.name in instance.__dict__:

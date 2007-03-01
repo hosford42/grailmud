@@ -133,3 +133,9 @@ class TestActionsAndEvents(SetupHelper):
                    "Failed on %r, self.listener.received is %r" % \
                    (cmd, self.listener.received)
             self.obj.listener.received = []
+
+    def test_AudibleEvent_filtering(self):
+        self.obj.deaf = True
+        self.obj.receiveEvent(AudibleEvent())
+        print self.obj.listener.received
+        assert self.obj.listener.received == []

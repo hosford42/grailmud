@@ -116,3 +116,24 @@ def test_more_complicated_dispatch():
                                                [Signature((object, str)),
                                                 Signature((object, int)),
                                                 Signature((object, object))]
+
+class PotentialLogger(object):
+    
+    def __init__(self):
+        self.called = []
+
+next_method_caller = Multimethod()
+
+@next_method_caller.register(object)
+def next_method_caller(obj):
+    obj.called.append("base case")
+
+@next_method_caller.register(PotentialLogger)
+def next_method_caller(obj):
+    obj.called.append("higher case")
+    next_method_caller.call_next_method(obj)
+
+def test_next_method_calling():
+    obj = PotentialLogger()
+    next_method_caller(obj)
+    assert obj.called == ['higher case', 'base case']

@@ -140,7 +140,7 @@ def speak(actor, text):
 speakTo = Multimethod()
 
 @speakTo.register(MUDObject, MUDObject, basestring)
-def speakTo(acttor, _, text):
+def speakTo(actor, _, text):
     unfoundObject(actor)
 
 @speakTo.register(MUDObject, TargettableObject, basestring)
@@ -150,11 +150,11 @@ def speakTo(actor, target, text):
     else:
         actor.receiveEvent(SpeakToFirstEvent(target, text))
         target.receiveEvent(SpeakToSecondEvent(actor, text))
-        distributeEvent(actor.room, [actor],
+        distributeEvent(actor.room, [actor, target],
                         SpeakToThirdEvent(actor, target, text))
 
 def register(cdict):
     cdict['say'] = cdict['"'] = cdict["'"] = \
                    lambda actor, text, info: speak(actor, text)
-    cdict['say,'] = cdict["','"] = cdict['",'] = cdict['sayto'] \
+    cdict['say,'] = cdict["',"] = cdict['",'] = cdict['sayto'] \
                   = speakToWrapper
