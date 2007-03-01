@@ -17,7 +17,7 @@ grailmud (in the file named LICENSE); if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 """
 
-from grailmud.utils import InstanceTracker, InstanceVariableFactoryObject
+from grailmud.utils import InstanceTracker
 import pickle
 
 class FooClass(InstanceTracker):
@@ -49,54 +49,6 @@ def test_superclass_tracking():
     _helper(FooSubclass, FooClass)
     _helper(FooSubclass)
 
-class FooFactoryClass(InstanceVariableFactoryObject):
-    qux = "class"
-    quux = 'class'
-    pass
-
-def test_instance_variable_factory():
-    assert hasattr(FooFactoryClass, "_instance_variable_factories")
-
-def test_default_variables():
-    sentinel = object()
-    FooFactoryClass._instance_variable_factories['foo'] = lambda self: sentinel
-    assert FooFactoryClass().foo is sentinel
-
-def test_setting_default_variables():
-    sentinel = object()
-    FooFactoryClass._instance_variable_factories['foo'] = lambda self: sentinel
-    f = FooFactoryClass()
-    assert 'foo' not in f.__dict__
-    assert f.foo is sentinel
-    assert f.__dict__['foo'] is sentinel
-
-def test_throws_AttributeError():
-    try:
-        FooFactoryClass().nonexistant
-    except AttributeError:
-        pass
-    else:
-        assert False
-
-def test_returns_from___dict___():
-    FooFactoryClass._instance_variable_factories['foo'] = lambda s: 'bar'
-    f = FooFactoryClass()
-    f.foo = "baz"
-    assert f.foo == "baz"
-
-def test_default_shadows_class_variable():
-    sentinel = object()
-    FooFactoryClass._instance_variable_factories['quux'] = lambda s: sentinel
-    assert FooFactoryClass().quux is sentinel
-
-class FooFactorySubclass(FooFactoryClass):
-    pass
-
-def test_inherited():
-    FooFactoryClass._instance_variable_factories['qux'] = lambda s: 'right'
-    print FooFactorySubclass().qux
-    assert FooFactorySubclass().qux == 'right'
-
 def test_non_equality():
     assert FooClass() != FooClass()
 
@@ -115,6 +67,51 @@ def test_pickling_throwing_error():
         pass
     else:
         assert newobj is obj
+
+from grailmud.utils import defaultinstancevariable
+
+class BlankClass():
+    pass
+
+def test_raises_AttributeError_with_no_instance():
+    @defaultinstancevariable(BlankClass, "foo")
+    def nonereturner(self):
+        return None
+    try:
+        print BlankClass.foo
+    except AttributeError:
+        pass
+    else:
+        assert False
+
+def test_not_called_if_in_dict():
+    @defaultinstancevariable(BlankClass, "foo")
+    def nonereturner(self):
+        called.append(True)
+    called = []
+    b = BlankClass()
+    b.foo = "bar"
+    assert b.foo == "bar"
+    assert not called
+
+def test_called_if_not_in_dict():
+    sentinel = object()
+    @defaultinstancevariable(BlankClass, "foo")
+    def sentinelreturner(self):
+        return sentinel
+    b = BlankClass()
+    assert b.foo is sentinel
+
+class BlankSubclass(BlankClass):
+    pass
+
+def test_default_inheriting():
+    sentinel = object()
+    @defaultinstancevariable(BlankClass, "foo")
+    def sentinelreturner(self):
+        return sentinel
+    b = BlankSubclass()
+    assert b.foo is sentinel
 
 from grailmud.utils import smartdict
 

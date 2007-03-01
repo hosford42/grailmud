@@ -21,7 +21,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 
 from pyparsing import *
 from grailmud.events import AudibleEvent, GameEvent
-from grailmud.objects import MUDObject, definein
+from grailmud.objects import MUDObject
+from grailmud.utils import defaultinstancevariable
 from .system import badSyntax
 from grailmud.utils import promptcolour
 
@@ -90,8 +91,8 @@ def deafOff(actor):
         actor.deaf = False
         actor.receiveEvent(DeafnessOffEvent())
 
-@definein(MUDObject._instance_variable_factories)
-def deaf(self):
+@defaultinstancevariable(MUDObject, "deaf")
+def deaf_default(self):
     return False
 
 @MUDObject.receiveEvent.register(MUDObject, AudibleEvent)

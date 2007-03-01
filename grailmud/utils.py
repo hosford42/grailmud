@@ -178,40 +178,30 @@ class InstanceTracker(object):
     def __eq__(self, other):
         return self is other
 
-class InstanceVariableFactoryMetaclass(type):
+BothAtOnce = InstanceTracker
 
-    def __init__(cls, name, bases, dictionary):
-        cls._instance_variable_factories = {}
-        super(InstanceVariableFactoryMetaclass,
-              cls).__init__(name, bases, dictionary)
+class _DefaultInstanceVariable(object):
 
-class InstanceVariableFactoryObject(object):
+    def __init__(self, name, fn):
+        self.name = name
+        self.fn = fn
 
-    __metaclass__ = InstanceVariableFactoryMetaclass
-    
-    def __getattribute__(self, attr):
-        #please note, this method took a little while to get right, so don't
-        #just change it willy-nilly. if something is here, it is here for a
-        #reason, and not a hysterical one.
-        if attr not in ('__dict__', '__class__'):
-            if attr not in self.__dict__:
-                for cls in type(self).__mro__:
-                    if attr in getattr(cls, '_instance_variable_factories',
-                                       {}):
-                        res = cls._instance_variable_factories[attr](self)
-                        setattr(self, attr, res)
-                        return res
+    def __get__(self, instance, owner):
+        print '__get__ called with %r, %r, %r' % (self, owner, instance)
+        if instance is None:
+            raise AttributeError()
+        if self.name in instance.__dict__:
+            return instance.__dict__[self.name]
+        res = self.fn(instance)
+        setattr(instance, self.name, res)
+        return res
 
-                if not any((attr in cls.__dict__) 
-                            for cls in type(self).__mro__):
-                    raise AttributeError()
-            
-        return object.__getattribute__(self, attr)
+    def __set__(self, instance, value):
+        instance.__dict__[self.name] = value
 
-class BothAtOnceMetaclass(InstanceTrackingMetaclass,
-                          InstanceVariableFactoryMetaclass):
-    pass
+def defaultinstancevariable(cls, name):
+    def fngetter(fn):
+        setattr(cls, name, _DefaultInstanceVariable(name, fn))
+        return fn
+    return fngetter
 
-class BothAtOnce(InstanceVariableFactoryObject, InstanceTracker):
-
-    __metaclass__ = BothAtOnceMetaclass

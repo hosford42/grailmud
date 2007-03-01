@@ -20,7 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 import logging
 from grailmud.morelimiter import MoreLimiter
 from grailmud.actiondefs.more import displayMore
-from grailmud.objects import definein, Player
+from grailmud.objects import Player
+from grailmud.utils import defaultinstancevariable
 
 class Listener(object):
     '''Base class for listeners.'''
@@ -49,15 +50,15 @@ class Listener(object):
     def listenToEvent(self, obj, event):
         raise NotImplementedError()
 
-@definein(Player._instance_variable_factories)
+@defaultinstancevariable(Player, "more_limiter")
 def more_limiter(self):
     return MoreLimiter(20)
 
-@definein(Player._instance_variable_factories)
+@defaultinstancevariable(Player, "chunks")
 def chunks(self):
     return iter([])
 
-@definein(Player._instance_variable_factories)
+@defaultinstancevariable(Player, "chunked_event")
 def chunked_event(self):
     return None
 

@@ -21,8 +21,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 
 from pyparsing import *
 from grailmud.events import BaseEvent
-from grailmud.utils import promptcolour
-from grailmud.objects import TargettableObject, definein
+from grailmud.utils import promptcolour, defaultinstancevariable
+from grailmud.objects import TargettableObject
 from .system import badSyntax
 from string import whitespace
 from grailmud.strutils import wsnormalise
@@ -78,8 +78,8 @@ class SmartDictWrapper(object):
 
 default_long_desc = "%(sdesc)s. Nothing more, nothing less."
 
-@definein(TargettableObject._instance_variable_factories)
-def ldesc(self):
+@defaultinstancevariable(TargettableObject, "ldesc")
+def construct_ldesc(self):
     return default_long_desc % SmartDictWrapper(Dictator(self))
 
 def register(cdict):

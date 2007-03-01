@@ -22,17 +22,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 
 from grailmud.cleanimporter import CleanImporter
 from grailmud.events import BaseEvent
-from grailmud.objects import MUDObject, definein
-from grailmud.utils import promptcolour, get_from_rooms
+from grailmud.objects import MUDObject
+from grailmud.utils import promptcolour, get_from_rooms, \
+        defaultinstancevariable
 from grailmud.rooms import UnfoundError
 from .core import object_pattern, shorttarget_pattern
 from .system import permissionDenied, badSyntax, unfoundObject
 from pyparsing import ParseException
 
-#XXX: this module should be pretty easily testable.
-
-@definein(MUDObject._instance_variable_factories)
-def targetting_shorts(self):
+@defaultinstancevariable(MUDObject, "targetting_shorts")
+def targetting_shorts_default(self):
     return {}
 
 class TargetSetEvent(BaseEvent):
