@@ -32,12 +32,6 @@ from grailmud.utils import BothAtOnce
 #XXX: need some sort of implementation for stateless, groupable objects.
 #XXX: the metaclass/class hierarchy is a bit fragile.
 
-def definein(dictionary):
-    def functiongetter(func):
-        dictionary[func.__name__] = func
-        return func
-    return functiongetter
-
 class MUDObject(BothAtOnce):
     """An object in the MUD."""
     
