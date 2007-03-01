@@ -30,8 +30,8 @@ string interpolation - expressions such as::
 
 become possible (the above example results in ``"FOO"``). As with all uses of
 evaluation, this must be used with the utmost care and attention: it must be
-ensured that there are no stray ``\%`` characters in the string if it is 
-untrusted (though ``s.replace('%', '%%')`` fixes that.
+ensured that there are no stray ``%`` characters in the string if it is 
+untrusted (though ``s.replace('%', '%%')`` fixes that).
 
 ``InstanceTrackingMetaclass`` and ``InstanceTracker``
 -----------------------------------------------------
@@ -44,6 +44,30 @@ subclasses' ``_instances``. That is, if there is a class ``Foo`` which inherits
 from ``InstanceTracker``, all the ``Foo`` instances will appear in both 
 ``Foo._instances`` and ``InstanceTracker._instances``.
 
+``InstanceTracker`` has sprouted a method of its own, or two. Apart from the
+pickling and unpickling methods, it has ``add_to_instances``, which adds it to
+all appropriate ``_instances``, ``remove_from_instances``, the inverse, and
+``get_suitable_classes``, which is a generator that yields all the classes it
+inherits from that have ``_instances`` attributes.
+
 ``InstanceTrackingMetaclass`` is a friendly and co-operative metaclass. It 
 doesn't bully other metaclasses into submission (usually), but instead works
 quite nicely with them.
+
+The ``TrueDict``
+----------------
+
+Another ``dict`` derivative! This one has a much simpler modification - 
+``bool(TrueDict(dictionary))`` will always return ``True``, no matter what the
+value of ``dictionary`` is. This is used in the pickling mechanism of
+``InstanceTracker`` (specifically, it is returned by ``__getstate__`` to ensure
+``__setstate__`` is always called).
+
+``defaultinstancevariable``
+---------------------------
+
+This prettymuch does what it says on the tin. The way a default instance 
+variable works is that the object's class grows a descriptor which peeks into
+the object's ``__dict__``. If it finds a value under its key, it returns that.
+If not, it calls a specified function, sets the key in the ``__dict__`` to 
+that, and returns the computed value.
