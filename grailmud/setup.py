@@ -48,5 +48,5 @@ setup(name = "grailmud",
                 "Programming Language :: Python",
                 "Topic :: Communications :: Chat",
                 "Topic :: Games/Entertainment :: Multi-User Dungeons (MUD)",
-                "Development Status - 2 Pre-Alpha"]
+                "Development Status :: 2 - Pre-Alpha"]
 )
