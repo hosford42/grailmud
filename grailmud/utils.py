@@ -89,7 +89,9 @@ class smartdict(dict):
     """
     def __getitem__(self, item):
         #convert to dict to prevent infinite recursion
-        return eval(item, globals(), dict(self))
+        return eval(item, {}, dict(self))
+
+#XXX: weakrefs should be used below
 
 class InstanceTrackingMetaclass(type):
     '''A metaclass that removes some of the boilerplate needed for the
