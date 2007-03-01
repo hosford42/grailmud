@@ -21,7 +21,7 @@ from setuptools import setup, find_packages
 import os
 
 setup(name = "grailmud",
-      version = "0.1a1",
+      version = "0.1a2",
       packages = ['grailmud'],
       package_dir = {'grailmud': '.'},
       package_data = {'grailmud.actiondefs': ['*.py', 'emotefile.txt'],
@@ -46,5 +46,6 @@ setup(name = "grailmud",
                 "Operating System :: OS Independent",
                 "Programming Language :: Python",
                 "Topic :: Communications :: Chat",
-                "Topic :: Games/Entertainment :: Multi-User Dungeons (MUD)"]
+                "Topic :: Games/Entertainment :: Multi-User Dungeons (MUD)",
+                "Development Status - 2 Pre-Alpha"]
 )
