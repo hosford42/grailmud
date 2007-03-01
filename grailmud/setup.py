@@ -17,6 +17,8 @@ grailmud (in the file named LICENSE); if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 """
 
+#Checked out from revision $Revision$
+
 from setuptools import setup, find_packages
 import os
 

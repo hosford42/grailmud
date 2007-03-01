@@ -223,10 +223,11 @@ def register(cdict):
     cdict['emoteto'] = emoteToWrapper
     cdict['emote,'] = emoteToWrapper
 
-    emotefile = pkg_resources.resource_string(__name__, "emotefile.txt")
-    for name, yanked_emote in yank_emotes(emotefile):
-        cdict[name] = yanked_emote
-        yanked_emotes[name] = yanked_emote.send_out_events
+    #XXX: make working. Commented out because it refuses to work.
+#    emotefile = pkg_resources.resource_string(__name__, "emotefile.txt")
+#    for name, yanked_emote in yank_emotes(emotefile):
+#        cdict[name] = yanked_emote
+#        yanked_emotes[name] = yanked_emote.send_out_events
     
 def process(text):
     text = wsnormalise(text)
