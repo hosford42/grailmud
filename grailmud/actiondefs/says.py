@@ -29,6 +29,7 @@ from grailmud.strutils import capitalise, printables
 from grailmud.objects import MUDObject, TargettableObject
 from grailmud.utils import promptcolour, distributeEvent, get_from_rooms
 from grailmud.multimethod import Multimethod
+from pyparsing import ParseException
 
 class SpeakNormalFirstEvent(AudibleEvent):
 
@@ -117,8 +118,8 @@ class SpeakToThirdEvent(AudibleEvent):
             state.sendEventLine('%s says to %s, "%s"' % (da, dt, self.text))
 
 with CleanImporter("pyparsing"):
-    speakToPattern = Group(object_pattern) + \
-                     Suppress(',') + Group(ZeroOrMore(Word(printables)))
+    speakToPattern = object_pattern + Suppress(',') + \
+                     ZeroOrMore(Word(printables))
 
 def speakToWrapper(actor, text, info):
     try:
@@ -129,9 +130,10 @@ def speakToWrapper(actor, text, info):
         return
     try:
         target = get_from_rooms(blob, [actor.inventory, actor.room], info)
-        speakTo(actor, target, saying)
     except UnfoundError:
         unfoundObject(actor)
+    else:
+        speakTo(actor, target, saying)
 
 def speak(actor, text):
     actor.receiveEvent(SpeakNormalFirstEvent(text))

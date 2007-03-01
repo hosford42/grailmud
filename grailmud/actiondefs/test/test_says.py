@@ -41,18 +41,21 @@ def test_all_events_are_AudibleEvents():
 from grailmud.objects import MUDObject, TargettableObject
 from grailmud.rooms import AnonyRoom
 from grailmud.actiondefs.system import UnfoundObjectEvent
+from grailmud.telnet import LineInfo
+from grailmud.actiondefs.system import BadSyntaxEvent
 
 class TestEventSending(SetupHelper):
 
     def setUp(self):
         self.room = AnonyRoom()
         self.actor = MUDObject(self.room)
-        self.target = TargettableObject("", set('rabbit'), self.room)
+        self.target = TargettableObject("", set(['rabbit']), self.room)
         self.onlooker = MUDObject(self.room)
         self.other_room_target = TargettableObject('', set(), None)
         self.setup_for_object(self.actor)
         self.setup_for_object(self.target)
         self.setup_for_object(self.onlooker)
+        self.info = LineInfo(instigator = self.actor)
 
     def test_speak_actor_receives_event(self):
         speak(self.actor, "foo")
@@ -87,4 +90,16 @@ class TestEventSending(SetupHelper):
         speakTo(self.actor, self.other_room_target, "foo")
         assert self.actor.listener.received == [UnfoundObjectEvent()]
 
-    #XXX: test parsing
+    def test_speakToWrapper_success(self):
+        speakToWrapper(self.actor, "rabbit, foo", self.info)
+        print self.actor.listener.received
+        assert self.actor.listener.received == [SpeakToFirstEvent(self.target,
+                                                                  "foo")]
+
+    def test_speakToWrapper_parsing_failure(self):
+        speakToWrapper(self.actor, "bogusinputomatic", self.info)
+        assert self.actor.listener.received == [BadSyntaxEvent(None)]
+
+    def test_speakToWrapper_finding_target_failure(self):
+        speakToWrapper(self.actor, "bogus target, foo", self.info)
+        assert self.actor.listener.received == [UnfoundObjectEvent()]
