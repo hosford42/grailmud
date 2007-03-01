@@ -23,7 +23,7 @@ from setuptools import setup, find_packages
 import os
 
 setup(name = "grailmud",
-      version = "0.1a2",
+      version = "0.1a3",
       packages = ['grailmud'],
       package_dir = {'grailmud': '.'},
       package_data = {'grailmud.actiondefs': ['*.py', 'emotefile.txt'],
