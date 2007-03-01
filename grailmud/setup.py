@@ -27,7 +27,6 @@ setup(name = "grailmud",
       packages = ['grailmud'],
       package_dir = {'grailmud': '.'},
       package_data = {'grailmud.actiondefs': ['*.py', 'emotefile.txt'],
-                      'grailmud': ['LICENSE'],
                       'test': ['*'],
                       'doc': ['*.rst']},
 
