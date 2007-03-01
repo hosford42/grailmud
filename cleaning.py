@@ -31,7 +31,8 @@ def get_all_files_from_subdirs(directory):
 
 def filter_out_trash(files):
     for filename in files:
-        if filename.endswith('.pyc'):
+        #clean out pycs and generated docs
+        if filename.endswith('.pyc') or filename.endswith(".html"):
             yield filename
 
 def remove_trash(directory):
