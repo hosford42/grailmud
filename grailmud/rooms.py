@@ -27,10 +27,12 @@ class UnfoundError(Exception):
     pass
 
 
-class AnonyRoom(InstanceTracker):
+class Room(InstanceTracker):
     """A room without a title or description."""
 
-    def __init__(self):
+    def __init__(self, title, desc):
+        self.title = title
+        self.desc = desc
         self.contents = OrderedSet()
         InstanceTracker.__init__(self)
 
@@ -77,12 +79,7 @@ class AnonyRoom(InstanceTracker):
     def __iter__(self):
         return iter(self.contents)
         
-class Room(AnonyRoom):
-    """A single container or 'room'."""
 
-    def __init__(self, title, desc):
-        self.title = title
-        self.desc = desc
-        AnonyRoom.__init__(self)
-
+def AnonyRoom():
+    return Room('anonymous room', 'foo')
 

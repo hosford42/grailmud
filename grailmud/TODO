@@ -16,6 +16,10 @@ For 0.2
 * A proper object relational integrity system, possibly with querying. There is
 prior art here; SQLAlchemy, SQLObject, ZCatalog, et al.
 
+* An OLC system.
+
+* A timeout mechanism, to drop idle connections.
+
 Just nice to have
 =================
 
