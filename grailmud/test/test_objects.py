@@ -21,7 +21,8 @@ from grailmud.objects import MUDObject, TargettableObject, NamedObject, \
                              Player, TargettableExitObject
 from grailmud.events import BaseEvent
 import pickle
-from grailmud.utils_for_testing import MockListener as ListenerHelper
+from grailmud.utils_for_testing import MockListener as ListenerHelper, \
+        SetupHelper
 
 #XXX: I would -love- to have some proper tests for pickling here, but 
 #unfortunately, due to the design of the system, it's not really an option. And
@@ -99,5 +100,33 @@ def test_caseless_addition_to_name_registry():
 def test_TargettableExitObject_matching():
     obj = TargettableExitObject(None, None, '', set(['foo']))
     assert obj.match(set(['foo']))
+
+class Test_receivedLine(SetupHelper):
+
+    def setUp(self):
+        self.issued = []
+        self.obj = Player('foo', '', set(), {'foo': self.record_command}, None,
+                          '')
+
+    def tearDown(self):
+        del NamedObject._name_registry[self.obj.name]
+
+    def record_command(self, actor, text, info):
+        self.issued.append((actor, text, info))
+
+    def test_no_rest_of_line(self):
+        sentinelinfo = object()
+        self.obj.receivedLine('foo', sentinelinfo)
+        assert self.issued == [(self.obj, '', sentinelinfo)]
+
+    def test_rest_of_line(self):
+        sentinelinfo = object()
+        self.obj.receivedLine('foo bar', sentinelinfo)
+        assert self.issued == [(self.obj, 'bar', sentinelinfo)]
+
+    def test_caseless_command(self):
+        sentinelinfo = object()
+        self.obj.receivedLine('FOO bar', sentinelinfo)
+        assert self.issued == [(self.obj, 'bar', sentinelinfo)]
 
 
