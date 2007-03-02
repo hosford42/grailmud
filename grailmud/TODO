@@ -10,6 +10,9 @@ completely as possible.
 
 * Test ``actiondefs/login.py`` and ``actiondefs/logoff.py`` a bit.
 
+* Go through the XXXes and TODOs in the code and organise them a bit, and list
+them here if they're major.
+
 For 0.2
 =======
 
@@ -19,6 +22,8 @@ prior art here; SQLAlchemy, SQLObject, ZCatalog, et al.
 * An OLC system.
 
 * A timeout mechanism, to drop idle connections.
+
+* A way of stopping double-logins.
 
 Just nice to have
 =================
