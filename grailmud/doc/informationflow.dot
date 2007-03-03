@@ -1,0 +1,7 @@
+digraph information_flow {
+    MUDObjects -> Listeners [ label = "Events" ];
+    Listeners -> Actions [ label = "Arguments (function calls)" ];
+    Listeners -> Twisted [ label = "Events turned into text"];
+    Twisted -> Actions [ label = "Input lines parsed into Actions"];
+    Actions -> MUDObjects [ label = "Events and state changes" ];
+}

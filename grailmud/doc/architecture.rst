@@ -11,7 +11,8 @@ functions, and events are actually implemented like this (see ``events.py``).
 Objects receive these events and inform their listeners of this, and the 
 listeners take the appropriate action - for NPCs, this may be attacking, or for
 players, the event may be turned into text and sent down the tubes of Twisted. 
-(I should probably have some kind of information-flow-passing-graph here.)
+
+.. image:: informationflow.png
 
 Thus we achieve a separation between business and display logic: actions do
 their thing, and send the object an event without making any display decisions.
