@@ -16,7 +16,9 @@ for normal operations; ``setuptools`` is needed for installation.
 
 In addition, ``docutils`` is used to produce a HTML-ified version of the docs.
 This is not strictly needed; the docs are written in reST which is quite 
-readable in plain text, but it may be nice to have.
+readable in plain text, but it may be nice to have. In addition to this,
+``ImageMagik`` and ``graphviz`` are needed to construct the images in the 
+docs.
 
 Running ``grailmud``
 ====================
