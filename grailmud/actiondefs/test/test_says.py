@@ -92,9 +92,15 @@ class TestEventSending(SetupHelper):
 
     def test_speakToWrapper_success(self):
         speakToWrapper(self.actor, "rabbit, foo", self.info)
-        print self.actor.listener.received
+        print self.actor.listener.received[0].__dict__
         assert self.actor.listener.received == [SpeakToFirstEvent(self.target,
                                                                   "foo")]
+
+    def test_speakToWrapper_success_multiword(self):
+        speakToWrapper(self.actor, "rabbit, foo bar", self.info)
+        print self.actor.listener.received[0].__dict__
+        assert self.actor.listener.received == [SpeakToFirstEvent(self.target,
+                                                                  "foo bar")]
 
     def test_speakToWrapper_parsing_failure(self):
         speakToWrapper(self.actor, "bogusinputomatic", self.info)

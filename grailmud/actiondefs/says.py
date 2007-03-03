@@ -118,12 +118,14 @@ class SpeakToThirdEvent(AudibleEvent):
             state.sendEventLine('%s says to %s, "%s"' % (da, dt, self.text))
 
 with CleanImporter("pyparsing"):
-    speakToPattern = object_pattern + Suppress(',') + \
-                     ZeroOrMore(Word(printables))
+    from string import whitespace
+    speakToPattern = object_pattern + Suppress(',' + ZeroOrMore(whitespace)) +\
+                     restOfLine
 
 def speakToWrapper(actor, text, info):
     try:
-        blob, saying = speakToPattern.parseString(text)
+        res = speakToPattern.parseString(text)
+        blob, saying = res
     except ParseException:
         badSyntax(actor, "Can't find the end of the target identifier. Use "
                          "',' at its end to specify it.")
