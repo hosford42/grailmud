@@ -28,7 +28,7 @@ def promptcolour(colourname = 'normal', chunk = False):
     """Eliminate some boilerplace for event text collapsers."""
     def fngrabber(func):
         def doer_of_stuff(self, state, obj):
-            state.forcePrompt()
+            state.forcePromptNL()
             if chunk:
                 state.chunk()
             state.setColourName(colourname)
