@@ -25,6 +25,7 @@ import sys
 import os
 import os.path
 import copy
+import subprocess
 import docutils
 from docutils import ApplicationError
 from docutils import core, frontend
@@ -191,6 +192,10 @@ class Builder:
                 prune = self.process_rst(directory, name)
                 if prune:
                     break
+            elif name.endswith(".dot"):
+                self.process_dot(directory, name)
+            elif name.endswith(".svg"):
+                self.process_svg(directory, name)
         if not recurse:
             del names[:]
 
@@ -219,6 +224,21 @@ class Builder:
             print >>sys.stderr, ('        Error (%s): %s'
                                  % (error.__class__.__name__, error))
 
+    def process_dot(self, directory, origname):
+        strippedname, _, ext = origname.rpartition('.')
+        destname = strippedname + '.png'
+        destfile = open(os.path.join(directory, destname), 'w')
+        origpath = os.path.normpath(os.path.join(directory, origname))
+        subprocess.call('dot %s -Tpng' % origpath, stdout = destfile)
+
+    def process_svg(self, directory, origname):
+        strippedname, _, ext = origname.rpartition('.')
+        destname = strippedname + '.png'
+        origpath = os.path.join(directory, origname)
+        destpath = os.path.join(directory, destname)
+        callingwith = 'convert %s %s' % (origpath, destpath)
+        print repr(callingwith)
+        subprocess.call(callingwith)
 
 if __name__ == "__main__":
     Builder().run()

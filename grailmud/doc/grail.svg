@@ -8,16 +8,17 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="348.34134"
+   height="570.60608"
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.44"
    inkscape:export-filename="C:\sam\grail.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
-   sodipodi:docbase="C:\sam"
-   sodipodi:docname="grail.svg">
+   sodipodi:docbase="C:\sam\projects\grailmud\grailmud\doc"
+   sodipodi:docname="grail.svg"
+   version="1.0">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -30,9 +31,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
+     inkscape:zoom="0.98994949"
      inkscape:cx="382.62119"
-     inkscape:cy="345.10945"
+     inkscape:cy="268.37384"
      inkscape:document-units="px"
      inkscape:current-layer="layer4"
      inkscape:window-width="1280"
@@ -54,7 +55,8 @@
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="bg"
-     style="opacity:1">
+     style="opacity:1"
+     transform="translate(-193.0201,-291.7847)">
     <path
        sodipodi:type="arc"
        style="opacity:1;fill:#f2e500;fill-opacity:1;stroke:black;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -75,7 +77,8 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="cup"
-     style="opacity:1">
+     style="opacity:1"
+     transform="translate(-193.0201,-291.7847)">
     <path
        style="opacity:1;fill:#f2e500;fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 205.56603,332.14002 C 205.56603,332.14002 205.76167,615.99288 362.13968,615.99288 C 522.86825,615.99288 530.7126,334.16032 530.7126,334.16032"
@@ -86,12 +89,14 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     style="opacity:0.98924734" />
+     style="opacity:0.98924734"
+     transform="translate(-193.0201,-291.7847)" />
   <g
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="foo"
-     style="opacity:1">
+     style="opacity:1"
+     transform="translate(-193.0201,-291.7847)">
     <path
        sodipodi:type="star"
        style="opacity:1;fill:#d70000;fill-opacity:1;stroke:black;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -129,7 +134,8 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="body"
-     style="opacity:1">
+     style="opacity:1"
+     transform="translate(-193.0201,-291.7847)">
     <path
        sodipodi:type="arc"
        style="opacity:1;fill:#f2e500;fill-opacity:1;stroke:black;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"

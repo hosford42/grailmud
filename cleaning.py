@@ -32,7 +32,8 @@ def get_all_files_from_subdirs(directory):
 def filter_out_trash(files):
     for filename in files:
         #clean out pycs and generated docs
-        if filename.endswith('.pyc') or filename.endswith(".html"):
+        strippedname, dot, ext = filename.rpartition('.')
+        if ext in ['pyc', 'html', 'png']:
             yield filename
 
 def remove_trash(directory):
