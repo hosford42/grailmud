@@ -10,15 +10,23 @@ To install the package with all the defaults, execute::
 
 in the current directory.
 
-``grailmud`` depends on several external packages: ``setuptools``, ``Twisted``,
-``durus``, ``pyparsing``, and ``functional``. The latter four must be present
-for normal operations; ``setuptools`` is needed for installation.
+``grailmud`` depends on several external packages: setuptools_,  Twisted_, 
+durus_, pyparsing_, and functional_. The latter four must be present for 
+normal operations; setuptools is only needed for installation.
 
-In addition, ``docutils`` is used to produce a HTML-ified version of the docs.
+In addition, docutils_ is used to produce a HTML-ified version of the docs. 
 This is not strictly needed; the docs are written in reST which is quite 
-readable in plain text, but it may be nice to have. In addition to this,
-``ImageMagik`` and ``graphviz`` are needed to construct the images in the 
-docs.
+readable in plain text, but it may be nice to have. ImageMagick_ and graphviz_
+are needed to construct the images in the docs.
+
+.. _docutils: http://docutils.sourceforge.net/
+.. _Twisted: http://twistedmatrix.com
+.. _setuptools: http://peak.telecommunity.com/DevCenter/setuptools
+.. _durus: http://www.mems-exchange.org/software/durus/
+.. _pyparsing: http://pyparsing.wikispaces.com/
+.. _ImageMagick: http://www.imagemagick.org
+.. _graphviz: http://www.graphviz.org
+.. _functional: http://oakwinter.com/code/functional/
 
 Running ``grailmud``
 ====================
@@ -38,14 +46,17 @@ to launch the server. It listens on port 6666.
 Running the tests
 =================
 
-To run ``grailmud``'s unit testing suite, you need the nose testing tool. With 
-that installed, run::
+To run ``grailmud``'s unit testing suite, you need the nose_ testing tool. 
+With that installed, run::
 
     nosetests
 
 at the shell in ``grailmud``'s directory.
 
+.. _nose: http://somethingaboutorange.com/mrl/projects/nose/
+
 Author
 ======
 
-The author of grailmud is Sam Pointon <free.condiments@gmail.com>.
+The author of grailmud is Sam Pointon ``<free.condiments@gmail.com>``.
+
