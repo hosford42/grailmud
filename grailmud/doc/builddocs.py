@@ -241,7 +241,7 @@ class Builder:
         #in preference to the one we want. I have worked around this problem
         #by renaming my IM convert.exe to imconvert.exe, but try both if you
         #run into problems.
-        callingwith = 'convert %s %s' % (origname, destname)
+        callingwith = 'convert -background none %s %s' % (origname, destname)
         subprocess.call('im' + callingwith)
         #subprocess.call(callingwith)
 
