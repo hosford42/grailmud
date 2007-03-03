@@ -14,6 +14,10 @@ in the current directory.
 ``durus``, ``pyparsing``, and ``functional``. The latter four must be present
 for normal operations; ``setuptools`` is needed for installation.
 
+In addition, ``docutils`` is used to produce a HTML-ified version of the docs.
+This is not strictly needed; the docs are written in reST which is quite 
+readable in plain text, but it may be nice to have.
+
 Running ``grailmud``
 ====================
 
