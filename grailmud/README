@@ -10,6 +10,10 @@ To install the package with all the defaults, execute::
 
 in the current directory.
 
+``grailmud`` depends on several external packages: ``setuptools``, ``Twisted``,
+``durus``, ``pyparsing``, and ``functional``. The latter four must be present
+for normal operations; ``setuptools`` is needed for installation.
+
 Running ``grailmud``
 ====================
 
