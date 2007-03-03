@@ -1,0 +1,8 @@
+============================
+Things what have happened
+============================
+
+New in grailmud 0.1a3
+=====================
+
+* A new action, ``commands``, which lists the commands visible to the player.

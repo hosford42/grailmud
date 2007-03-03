@@ -25,6 +25,8 @@ prior art here; SQLAlchemy, SQLObject, ZCatalog, et al.
 
 * A way of stopping double-logins.
 
+* Make telnet.py cope with VT100 deletion, etc commands.
+
 Just nice to have
 =================
 
