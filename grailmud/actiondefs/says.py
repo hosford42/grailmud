@@ -118,9 +118,8 @@ class SpeakToThirdEvent(AudibleEvent):
             state.sendEventLine('%s says to %s, "%s"' % (da, dt, self.text))
 
 with CleanImporter("pyparsing"):
-    from string import whitespace
-    speakToPattern = object_pattern + Suppress(',' + ZeroOrMore(whitespace)) +\
-                     restOfLine
+    from string import printable
+    speakToPattern = object_pattern + Suppress(',') + Word(printable)
 
 def speakToWrapper(actor, text, info):
     try:
