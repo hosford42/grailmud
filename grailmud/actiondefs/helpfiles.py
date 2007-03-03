@@ -43,7 +43,7 @@ class HelpNotFoundEvent(SystemEvent):
         state.sendEventLine("No help was found on '%s'." % self.pagename)
 
 def helpGetter(hdict):
-    def realHelp(actor, text):
+    def realHelp(actor, text, info):
         #maybe TODO: implement some sort of adjective search thing. Or perhaps
         #a full-text search.
         text = wsnormalise(text.lower())

@@ -71,7 +71,7 @@ class SpeakToFirstEvent(AudibleEvent):
     @promptcolour("speech")
     def collapseToText(self, state, obj):
         d = self.target.sdesc
-        if self.text:
+        if not self.text:
             state.sendEventLine("You turn to %s and open your mouth, as if to "
                                 "say something, but instead you gawp for a few "
                                 "moments until you realise you have nothing to "
@@ -89,7 +89,7 @@ class SpeakToSecondEvent(AudibleEvent):
     @promptcolour("speech")
     def collapseToText(self, state, obj):
         d = capitalise(self.actor.sdesc)
-        if self.text:
+        if not self.text:
             state.sendEventLine("%s turns to you and opens their mouth, but "
                                 "says nothing, as if to catch a fly. Realising "
                                 "how silly they look, they promptly clamp "
@@ -108,7 +108,7 @@ class SpeakToThirdEvent(AudibleEvent):
     def collapseToText(self, state, obj):
         da = capitalise(self.actor.sdesc)
         dt = capitalise(self.actor.sdesc)
-        if self.text:
+        if not self.text:
             state.sendEventLine("%s turns to %s and opens their mouth, but "
                                 "says nothing, as if to catch a fly. Realising "
                                 "how silly they look, they promptly clamp "
