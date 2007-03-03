@@ -35,8 +35,10 @@ class ConnectionFactory(Factory):
         grailmud.instance._bind(self)
         self.objstore = objstorethunk()
         self.root = self.objstore.get_root()
-        Room.prefab_instances(self.root['all_rooms'])
-        MUDObject.prefab_instances(self.root['all_objects'])
+        #these look like no-ops, but they're not. Accessing them ought to 
+        #unpickle everything, and thus insert them into _instances and whatnot.
+        self.root['all_rooms']
+        self.root['all_objects']
         TargettableObject._name_registry = \
                                       self.root['targettable_objects_by_name']
     

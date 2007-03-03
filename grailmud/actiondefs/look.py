@@ -56,6 +56,7 @@ class LookRoomEvent(VisibleEvent):
         state.sendEventLine(" ".join(peopleList))
 
 with CleanImporter('pyparsing'):
+    # pylint: disable-msg=E0602
     lookAtPattern = Suppress(Optional(Keyword("at"))) + \
                     object_pattern
 

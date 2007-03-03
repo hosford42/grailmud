@@ -1,6 +1,4 @@
-# pylint: disable-msg= E1101,W0212
-#pylint doesn't know about our metaclass hackery, and complains about the use
-#of the leading underscore variables.
+
 """Instantiate the MUDlib and write it to disk."""
 
 __copyright__ = """Copyright 2007 Sam Pointon"""
@@ -52,11 +50,15 @@ try:
 
     root = connection.get_root()
 
+    # pylint: disable-msg= E1101,W0212
+    #pylint doesn't know about our metaclass hackery, and complains about the
+    #use of the leading underscore variables.
     root['startroom'] = startroom
     root['all_rooms'] = Room._instances
     root['all_objects'] = MUDObject._instances
     root['targettable_objects_by_name'] = NamedObject._name_registry
     root['ticker'] = Ticker(0.1)
+    # pylint: enable-msg= E1101,W0212
 
     connection.commit()
 except:

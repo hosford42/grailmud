@@ -57,6 +57,7 @@ class DeafnessOffAlreadyEvent(GameEvent):
         state.sendEventLine("You're not deaf, silly!")
 
 with CleanImporter("pyparsing"):
+    # pylint: disable-msg=E0602
     on_pattern = Literal('on')
     off_pattern = Literal('off')
 

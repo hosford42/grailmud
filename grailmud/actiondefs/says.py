@@ -25,7 +25,7 @@ from .core import object_pattern
 from grailmud.events import AudibleEvent
 from .system import unfoundObject, badSyntax
 from grailmud.rooms import UnfoundError
-from grailmud.strutils import capitalise, printables
+from grailmud.strutils import capitalise, printable
 from grailmud.objects import MUDObject, TargettableObject
 from grailmud.utils import promptcolour, distributeEvent, get_from_rooms
 from grailmud.multimethod import Multimethod
@@ -56,8 +56,8 @@ class SpeakNormalThirdEvent(AudibleEvent):
     def collapseToText(self, state, obj):
         d = capitalise(self.actor.sdesc)
         if not self.text:
-            state.sendEventLine("%s opens their mouth, as if to say something, "
-                                "but rescinds after a few seconds of silly "
+            state.sendEventLine("%s opens their mouth, as if to say something,"
+                                " but rescinds after a few seconds of silly "
                                 "gaping." % d)
         else:
             state.sendEventLine('%s says, "%s"' % (d, self.text))
@@ -73,9 +73,9 @@ class SpeakToFirstEvent(AudibleEvent):
         d = self.target.sdesc
         if not self.text:
             state.sendEventLine("You turn to %s and open your mouth, as if to "
-                                "say something, but instead you gawp for a few "
-                                "moments until you realise you have nothing to "
-                                "say, and prompty close your mouth again."
+                                "say something, but instead you gawp for a few"
+                                " moments until you realise you have nothing "
+                                "to say, and prompty close your mouth again."
                                 % d)
         else:
             state.sendEventLine('You say to %s, "%s"' % (d, self.text))
@@ -91,8 +91,8 @@ class SpeakToSecondEvent(AudibleEvent):
         d = capitalise(self.actor.sdesc)
         if not self.text:
             state.sendEventLine("%s turns to you and opens their mouth, but "
-                                "says nothing, as if to catch a fly. Realising "
-                                "how silly they look, they promptly clamp "
+                                "says nothing, as if to catch a fly. Realising"
+                                " how silly they look, they promptly clamp "
                                 "their jaw shut after a few seconds." % d)
         else:
             state.sendEventLine('%s says to you, "%s"' % (d, self.text))
@@ -110,15 +110,15 @@ class SpeakToThirdEvent(AudibleEvent):
         dt = capitalise(self.actor.sdesc)
         if not self.text:
             state.sendEventLine("%s turns to %s and opens their mouth, but "
-                                "says nothing, as if to catch a fly. Realising "
-                                "how silly they look, they promptly clamp "
+                                "says nothing, as if to catch a fly. Realising"
+                                " how silly they look, they promptly clamp "
                                 "their jaw shut after a few seconds."
                                 % (da, dt))
         else:
             state.sendEventLine('%s says to %s, "%s"' % (da, dt, self.text))
 
 with CleanImporter("pyparsing"):
-    from string import printable
+    # pylint: disable-msg=E0602
     speakToPattern = object_pattern + Suppress(',') + Word(printable)
 
 def speakToWrapper(actor, text, info):

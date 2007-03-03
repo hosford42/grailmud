@@ -75,6 +75,7 @@ class TargetListEvent(BaseEvent):
             state.sendEventLine("%s: %s" % (name, obj.sdesc))
 
 with CleanImporter('pyparsing'):
+    # pylint: disable-msg= E0602
     target_set_pattern = Suppress('set') + shorttarget_pattern + \
                          Suppress('to') + object_pattern
 

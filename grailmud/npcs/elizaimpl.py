@@ -1,3 +1,5 @@
+from __future__ import with_statement
+
 __copyright__ = """Copyright 2007 Sam Pointon"""
 
 __licence__ = """

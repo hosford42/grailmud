@@ -18,6 +18,8 @@ profile=no
 # path. You may set this option multiple times.
 ignore=CVS
 ignore=test
+ignore=utils_for_testing
+ignore=.svn
 
 # Pickle collected data for later comparisons.
 persistent=yes
@@ -38,7 +40,7 @@ load-plugins=
 
 # Enable all checker(s) except those with the given id(s). This option conflict
 # with the disable-checker option
-#disable-checker=
+#disable-checker=similarities
 
 # Enable all messages in the listed categories.
 #enable-msg-cat=
