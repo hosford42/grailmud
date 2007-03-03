@@ -236,9 +236,14 @@ class Builder:
         destname = strippedname + '.png'
         origpath = os.path.join(directory, origname)
         destpath = os.path.join(directory, destname)
-        callingwith = 'convert %s %s' % (origpath, destpath)
-        print repr(callingwith)
-        subprocess.call(callingwith)
+        #big, big, big hack: we bump into a major problem here on Windows 
+        #in that there is a built-in tool named convert.exe, which gets called
+        #in preference to the one we want. I have worked around this problem
+        #by renaming my IM convert.exe to imconvert.exe, but try both if you
+        #run into problems.
+        callingwith = 'convert %s %s' % (origname, destname)
+        subprocess.call('im' + callingwith)
+        #subprocess.call(callingwith)
 
 if __name__ == "__main__":
     Builder().run()
