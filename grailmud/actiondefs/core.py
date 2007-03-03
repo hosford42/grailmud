@@ -28,6 +28,7 @@ from grailmud.cleanimporter import CleanImporter
 
 #Some utilities.
 with CleanImporter('pyparsing'):
+    # pylint: disable-msg=E0602
     shorttarget_pattern = Group(Suppress('$') + Word(ascii_letters + digits))
     adjs_pattern = Group(Group(OneOrMore(Word(ascii_letters))) + 
                          Optional(Word(digits), "0"))

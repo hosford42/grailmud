@@ -18,11 +18,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 """
 
 from collections import deque
-from pyparsing import *
+from grailmud.cleanimporter import CleanImporter
 from string import punctuation, maketrans, printable
 from random import randrange, choice
-from grailmud.strutils import wsnormalise
+from grailmud.strutils import wsnormalise, printable
 from grailmud.utils import smartdict
+from pyparsing import ParseException
 
 napunctuation = ''.join(s for s in punctuation if s != "'")
 
@@ -114,6 +115,8 @@ def bettertranslate(string, dictionary):
                         string)
     return string % smartdict()
 
-responses = [(Suppress('i') + Word(printable),
-             ('Why do you %(res)s?',
-              'Do you enjoy that?'))]
+with CleanImporter("pyparsing"):
+    # pylint: disable-msg=E0602
+    responses = [(Suppress('i') + Word(printable),
+                 ('Why do you %(res)s?',
+                  'Do you enjoy that?'))]

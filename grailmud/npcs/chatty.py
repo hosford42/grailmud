@@ -24,9 +24,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 
 from grailmud.multimethod import Multimethod
 from grailmud.events import BaseEvent
-from ..actiondefs.system import UnfoundObjectEvent
-from ..actiondefs.emote import yanked_emotes, emote
-from ..actiondefs.says import SpeakToSecondEvent, speakTo
+from grailmud.actiondefs.system import UnfoundObjectEvent
+from grailmud.actiondefs.emote import yanked_emotes, emote
+from grailmud.actiondefs.says import SpeakToSecondEvent, speakTo
 from grailmud.objects import MUDObject
 from grailmud.listeners import Listener
 from .elizaimpl import Therapist

@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import with_statement
 
 __copyright__ = """Copyright 2007 Sam Pointon"""
 
@@ -19,8 +20,10 @@ grailmud (in the file named LICENSE); if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 """
 
-from pyparsing import *
+from pyparsing import ParseException
+from grailmud.strutils import printable
 from grailmud.events import AudibleEvent, GameEvent
+from grailmud.cleanimporter import CleanImporter
 from grailmud.objects import MUDObject
 from grailmud.utils import defaultinstancevariable
 from .system import badSyntax
@@ -53,8 +56,9 @@ class DeafnessOffAlreadyEvent(GameEvent):
     def collapseToText(self, state, obj):
         state.sendEventLine("You're not deaf, silly!")
 
-on_pattern = Literal('on')
-off_pattern = Literal('off')
+with CleanImporter("pyparsing"):
+    on_pattern = Literal('on')
+    off_pattern = Literal('off')
 
 syntaxmessage = "Use 'deaf on' to turn deafness on, or 'deaf off' to turn "\
                 "deafness off."

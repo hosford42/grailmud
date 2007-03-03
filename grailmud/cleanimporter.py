@@ -1,3 +1,5 @@
+'''Tools to reduce namespace pollution.'''
+
 __copyright__ = """Copyright 2007 Sam Pointon."""
 
 __licence__ = """
@@ -20,6 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 import sys
 
 def fetch_module_and_names(modname):
+    """Import a module and return it, and all of its toplevel names."""
     mod = __import__(modname)
     components = modname.split('.')[1:]
     try:
@@ -35,6 +38,9 @@ def fetch_module_and_names(modname):
     
 
 class CleanImporter(object):
+    """A context manager that creates a pseudo-namespace (actually, really 
+    it's dynamic scoping) to reduce namespace pollution thanks to ``import *``.
+    """
     #this does NOT clobber local names if used inside a function, and in fact
     #leaves locals well alone. This may be a problem when coupled with the
     #compiler's sneaky optimisation of local versus global lookup: names not
@@ -45,6 +51,7 @@ class CleanImporter(object):
         self.modname = modname
         self.oldglobals = {}
         self.names = None
+        self.frame = None
 
     def __enter__(self):
         mod, self.names = fetch_module_and_names(self.modname)
