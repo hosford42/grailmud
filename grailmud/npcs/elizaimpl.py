@@ -26,6 +26,7 @@ from random import randrange, choice
 from grailmud.strutils import wsnormalise, printable
 from grailmud.utils import smartdict
 from pyparsing import ParseException
+import re
 
 napunctuation = ''.join(s for s in punctuation if s != "'")
 
@@ -109,13 +110,11 @@ reflections = {
 }
 
 def bettertranslate(string, dictionary):
-    #XXX: still doesn't bloody work.
-    string = string.replace('%', '%%')
-    for in_, out in dictionary.iteritems():
-        string = re.sub(r'\b%s\b' % re.escape(in_),
-                        '%%("%s".lower())s' % out.upper(),
-                        string)
-    return string % smartdict()
+    matchingon = '(' + '|'.join(re.escape(s) for s in dictionary) + ')'
+    def replace(matchobj):
+        matchedon = matchobj.group(1)
+        return dictionary[matchedon]
+    return re.sub(matchingon, replace, string)
 
 with CleanImporter("pyparsing"):
     # pylint: disable-msg=E0602

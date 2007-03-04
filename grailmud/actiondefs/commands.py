@@ -46,10 +46,10 @@ def invert_dict(dictionary):
     return res
 
 def list_commands(actor):
-    if not hasattr(actor, 'cmd_list'):
+    if not hasattr(actor, 'cmd_dict'):
         actor.receiveEvent(NoCommandListEvent())
     else:
-        inverted_command_dict = invert_dict(actor.cmd_list)
+        inverted_command_dict = invert_dict(actor.cmd_dict)
         actor.receiveEvent(CommandListEvent(inverted_command_dict.values()))
 
 def register(cdict):
