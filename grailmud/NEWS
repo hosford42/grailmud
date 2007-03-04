@@ -6,3 +6,5 @@ New in grailmud 0.1a3
 =====================
 
 * A new action, ``commands``, which lists the commands visible to the player.
+
+* Proper handling of telnet NVT commands (especially backspace).
