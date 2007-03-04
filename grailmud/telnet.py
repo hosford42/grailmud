@@ -34,6 +34,7 @@ from grailmud.listeners import ConnectionState
 from grailmud.strutils import sanitise, alphatise, safetise, articleise, \
                             wsnormalise
 import grailmud
+from grailmud.nvt import make_string_sane
 from functools import wraps
 
 #some random vaguely related TODOs:
@@ -64,6 +65,7 @@ class LoggerIn(Telnet, LineOnlyReceiver):
         """
         #XXX: turn this into a deferred thingy and have it disconnect on
         #errback.
+        line = make_string_sane(line)
         meth = self.callback
         logging.debug("Line %r received, putting %r for the ticker." %
                       (line, meth))
