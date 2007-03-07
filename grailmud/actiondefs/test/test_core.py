@@ -19,12 +19,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 
 from grailmud.actiondefs.core import UnfoundActionEvent, unfoundAction, \
                                      register, shorttarget_pattern, \
-                                     adjs_pattern
+                                     adjs_pattern, object_pattern
 from grailmud.utils_for_testing import SetupHelper
 from collections import defaultdict
 from grailmud.objects import MUDObject
 from nose.tools import raises
-from pyparsing import ParseException, StringEnd
+from pyparsing import ParseException, StringEnd, Suppress, Word
+from string import printable
 
 def test_registered_default_factory():
     d = defaultdict()
@@ -43,8 +44,10 @@ class TestunfoundAction(SetupHelper):
 
 class Testshorttarget_pattern(object):
 
+    pattern = shorttarget_pattern
+
     def test_good(self):
-        res = list(shorttarget_pattern.parseString("$foo")[0])
+        res = list(self.pattern.parseString("$foo")[0])
         print locals()
         assert res == ["foo"]
 
@@ -53,32 +56,41 @@ class Testshorttarget_pattern(object):
         #this may look like cheating, but it's not. It makes sure that 
         #shorttarget_pattern doesn't sneakily eat everything up to the very end
         #of the string, even when that would be Bad.
-        strict = shorttarget_pattern + StringEnd()
+        strict = self.pattern + StringEnd()
         print strict.parseString("$foo bar")
 
     @raises(ParseException)
     def test_no_dollar(self):
-        print shorttarget_pattern.parseString("foo")
+        print self.pattern.parseString("foo")
 
     @raises(ParseException)
     def test_extra_at_beginning(self):
-        print shorttarget_pattern.parseString("bar $foo")
+        print self.pattern.parseString("bar $foo")
         
     @raises(ParseException)
     def test_empty(self):
-        print shorttarget_pattern.parseString("")
+        print self.pattern.parseString("")
+
+    def test_with_real_pattern(self):
+        pat = self.pattern + Suppress(',') + Word(printable)
+        res = list(pat.parseString('$foo, bar'))
+        res[0] = list(res[0])
+        print res
+        assert res == [['foo'], 'bar']
 
 class Testadjs_pattern(object):
 
+    pattern = adjs_pattern
+
     def test_good_no_number(self):
-        res = adjs_pattern.parseString("foo bar")[0]
+        res = self.pattern.parseString("foo bar")[0]
         assert len(res) == 2
         res = [list(res[0]), res[1]]
         print res
         assert res == [["foo", "bar"], "0"]
 
     def test_good_with_number(self):
-        res = adjs_pattern.parseString("foo bar 42")[0]
+        res = self.pattern.parseString("foo bar 42")[0]
         assert len(res) == 2
         res = [list(res[0]), res[1]]
         print res
@@ -86,4 +98,12 @@ class Testadjs_pattern(object):
 
     @raises(ParseException)
     def test_empty(self):
-        print adjs_pattern.parseString("")
+        print self.pattern.parseString("")
+
+class Testobject_pattern(Testadjs_pattern, Testshorttarget_pattern):
+
+    pattern = object_pattern
+    
+    def test_no_dollar(self):
+        #this becomes valid, so we disable the test.
+        pass

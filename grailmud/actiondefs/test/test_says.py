@@ -19,7 +19,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 
 from grailmud.actiondefs.says import SpeakNormalFirstEvent, \
         SpeakNormalThirdEvent, SpeakToFirstEvent, SpeakToSecondEvent, \
-        SpeakToThirdEvent, speakToWrapper, speak, speakTo, register
+        SpeakToThirdEvent, speakToWrapper, speak, speakTo, register, \
+        speakToPattern
 from grailmud.events import AudibleEvent
 from grailmud.utils_for_testing import SetupHelper
 
@@ -43,6 +44,7 @@ from grailmud.rooms import AnonyRoom
 from grailmud.actiondefs.system import UnfoundObjectEvent
 from grailmud.telnet import LineInfo
 from grailmud.actiondefs.system import BadSyntaxEvent
+from grailmud.actiondefs.targetting import targetSet
 
 class TestEventSending(SetupHelper):
 
@@ -98,6 +100,7 @@ class TestEventSending(SetupHelper):
 
     def test_speakToWrapper_success_multiword(self):
         speakToWrapper(self.actor, "rabbit, foo bar", self.info)
+        print self.actor.listener.received
         print self.actor.listener.received[0].__dict__
         assert self.actor.listener.received == [SpeakToFirstEvent(self.target,
                                                                   "foo bar")]
@@ -109,3 +112,17 @@ class TestEventSending(SetupHelper):
     def test_speakToWrapper_finding_target_failure(self):
         speakToWrapper(self.actor, "bogus target, foo", self.info)
         assert self.actor.listener.received == [UnfoundObjectEvent()]
+
+    def test_speakToWrapper_with_target(self):
+        targetSet(self.actor, "foo", self.target)
+        self.actor.listener.received = []
+        speakToWrapper(self.actor, "$foo, bar", self.info)
+        res = self.actor.listener.received
+        print res
+        assert res == [SpeakToFirstEvent(self.target, "bar")]
+
+def test_speakToPattern_with_target():
+    res = list(speakToPattern.parseString('$foo, bar'))
+    res[0] = list(res[0])
+    print res
+    assert res == [['foo'], 'bar']
