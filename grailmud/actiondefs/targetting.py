@@ -83,37 +83,42 @@ with CleanImporter('pyparsing'):
 
     target_list_pattern = Suppress('list')
 
+class Matcher(object):
+
+    def __init__(self, text):
+        self.text = text
+        self.results = None
+
+    def match(self, pat):
+        try:
+            self.results = pat.parseString(self.text)
+        except ParseException:
+            return False
+        else:
+            return True
+
 def targetDistributor(actor, text, info):
     if info.instigator is not actor:
         permissionDenied(info.instigator)
         return
-    try:
-        (name,), blob = target_set_pattern.parseString(text)
-    except ParseException:
-        pass
-    else:
+
+    matcher = Matcher(text)
+
+    if matcher.match(target_set_pattern):
+        (name,), blob = matcher.results
         try:
             target = get_from_rooms(blob, [actor.inventory, actor.room], info)
         except UnfoundError:
             unfoundObject(actor)
         else:
             targetSet(actor, name.lower(), target)
-        return
-    try:
-        (name,), = target_clear_pattern.parseString(text)
-    except ParseException:
-        pass
-    else:
+    elif matcher.match(target_clear_pattern):
+        (name,), = matcher.results
         targetClear(actor, name.lower())
-        return
-    try:
-        target_list_pattern.parseString(text)
-    except ParseException:
-        pass
-    else:
+    elif matcher.match(target_list_pattern):
         targetList(actor)
-        return
-    badSyntax(actor)
+    else:
+        badSyntax(actor)
 
 def targetSet(actor, name, target):
     actor.targetting_shorts[name] = target
