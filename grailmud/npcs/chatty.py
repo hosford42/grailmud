@@ -44,6 +44,7 @@ class ChattyListener(Listener):
         #ideally, each individual object would be given its own therapist on
         #demand, but that would require some way of keeping referential
         #integrity intact if they're removed from the gameworld.
+        #XXX: why can't we use a default instance variable on every MUDObject?
         self.lastchatted = None
         self.therapist = None
 

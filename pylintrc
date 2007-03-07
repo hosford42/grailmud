@@ -18,7 +18,7 @@ profile=no
 # path. You may set this option multiple times.
 ignore=CVS
 ignore=test
-ignore=utils_for_testing
+ignore=utils_for_testing.py
 ignore=.svn
 
 # Pickle collected data for later comparisons.
@@ -52,9 +52,12 @@ load-plugins=
 #enable-msg=
 
 # Disable the message(s) with the given id(s).
-disable-msg=W0611,W0223,W0232,E0102,W0613,W0231,W0142,W0401,C0203,R0801
+disable-msg=W0611,W0223,W0232,E0102,W0613,W0231,W0142,W0401,C0203,R0801,W0403
 #now, ordinarily, some of these would be code smell indicators, but we have 
 #some fun hacks.
+#W0403 is relative imports - we use the new style syntax for these, so I don't
+#see the problem.
+#R0801 is the code duplication one, but it's made useless by the GPL spiel.
 
 [REPORTS]
 
