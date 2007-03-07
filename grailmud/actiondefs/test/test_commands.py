@@ -49,7 +49,7 @@ from grailmud.objects import MUDObject
 
 class MockObjectWithCommands(MUDObject):
 
-    cmd_dict = {'foo': 'bar', 'baz': 'bar', 'qux': 'spam'}
+    cmdict = {'foo': 'bar', 'baz': 'bar', 'qux': 'spam'}
 
 from grailmud.utils_for_testing import SetupHelper
 from grailmud.actiondefs.commands import list_commands

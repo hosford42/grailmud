@@ -32,9 +32,7 @@ def make_string_sane(string):
         string = string.replace(char, '')
     string = string.lstrip(BS)
     while BS in string:
-        print string
         string = re.sub('.' + BS, '', string, 1)
-        print string
     return string
 
 
