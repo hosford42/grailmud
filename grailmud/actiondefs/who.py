@@ -29,10 +29,11 @@ class WhoHereEvent(BaseEvent):
     def __init__(self, objects):
         self.objects = objects
 
-    @promptcolour("speech")
+    @promptcolour()
     def collapseToText(self, state, obj):
         #XXX: make this call a function to get the list of objects, to make
-        #sure hidden people and stuff are filtered out.
+        #sure hidden people and stuff are filtered out. Or, potentially, make
+        #whoHere do the filtering. Which is probably a better idea.
         state.sendEventLine("You see the following things present:")
         state.setColourName("people list")
         state.sendEventLine(', '.join(obj.sdesc for obj in self.objects))
@@ -42,11 +43,12 @@ class WhoEvent(BaseEvent):
     def __init__(self, actor):
         self.actor = actor
 
-    @promptcolour("speech")
+    @promptcolour()
     def collapseToText(self, state, obj):
         state.sendEventLine("No 'who' functionality yet.")
 
 with CleanImporter('pyparsing'):
+    # pylint: disable-msg=E0602
     whoHerePattern = Suppress("here")
 
 def whoDistributor(actor, text, info):

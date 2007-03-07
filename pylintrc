@@ -63,7 +63,7 @@ disable-msg=W0611,W0223,W0232,E0102,W0613,W0231,W0142,W0401,C0203,R0801,W0403
 
 # set the output format. Available formats are text, parseable, colorized and
 # html
-output-format=text
+output-format=html
 
 # Include message's id in output
 include-ids=yes
@@ -110,7 +110,7 @@ required-attributes=
 
 # Regular expression which should only match functions or classes name which do
 # not require a docstring
-no-docstring-rgx=^(__.*__|collapseToText)$
+no-docstring-rgx=^(__.*__|collapseToText|register)$
 
 # Regular expression which should only match correct module names
 module-rgx=(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$
