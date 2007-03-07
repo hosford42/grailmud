@@ -33,7 +33,7 @@ with CleanImporter('pyparsing'):
     adjs_pattern = Group(Group(OneOrMore(Word(ascii_letters))) + 
                          Optional(Word(digits), "0"))
 
-    object_pattern = Or(adjs_pattern, shorttarget_pattern)
+    object_pattern = adjs_pattern ^ shorttarget_pattern
 
 class UnfoundActionEvent(SystemEvent):
 

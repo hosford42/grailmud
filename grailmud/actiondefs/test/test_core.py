@@ -65,6 +65,8 @@ class Testshorttarget_pattern(object):
 
     @raises(ParseException)
     def test_extra_at_beginning(self):
+        #see note above, but this is really for object_pattern's tests below.
+        pat = self.pattern + StringEnd()
         print self.pattern.parseString("bar $foo")
         
     @raises(ParseException)
