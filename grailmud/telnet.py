@@ -248,6 +248,8 @@ class CreationHandler(ConnectionHandler):
         """
         if not line:
             line = self.sdesc
+        #TODO: we want finer-grained control over who gets what command. While
+        #the current method is convenient, it's not really the best.
         self.adjs = set(word.lower() for word in line.split())
         avatar = Player(self.name, self.sdesc, self.adjs, get_actions(),
                         grailmud.instance.startroom, self.passhash)
