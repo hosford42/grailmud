@@ -65,8 +65,6 @@ class Testshorttarget_pattern(object):
 
     @raises(ParseException)
     def test_extra_at_beginning(self):
-        #see note above, but this is really for object_pattern's tests below.
-        pat = self.pattern + StringEnd()
         print self.pattern.parseString("bar $foo")
         
     @raises(ParseException)
@@ -109,3 +107,9 @@ class Testobject_pattern(Testadjs_pattern, Testshorttarget_pattern):
     def test_no_dollar(self):
         #this becomes valid, so we disable the test.
         pass
+
+    @raises(ParseException)
+    def test_extra_at_beginning(self):
+        #see note above
+        strict = self.pattern + StringEnd()
+        print strict.parseString("bar $foo")
