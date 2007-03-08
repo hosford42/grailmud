@@ -123,3 +123,17 @@ def test_wsnormalise_bad_whitespace():
     res = wsnormalise(text)
     print repr(res)
     assert res == 'foo bar baz'
+
+from grailmud.strutils import capitalise
+
+def test_capitalise_upper_first_letter():
+    assert capitalise('foo') == 'Foo'
+
+def test_capitalise_no_clobbering_other_case():
+    assert capitalise('fOO') == 'FOO'
+
+def test_capitalise_no_blow_up_on_length_0():
+    assert capitalise('') == ''
+
+def test_capitalise_no_blow_up_on_length_1():
+    assert capitalise('f') == 'F'

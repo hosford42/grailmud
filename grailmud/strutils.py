@@ -49,7 +49,11 @@ def articleise(string):
 
 def capitalise(s):
     """Capitalise in BrE."""
-    return s.capitalize()
+    #we do it -better- than s.capitalize() - that lowercases the rest.
+    if not s:
+        #don't blow up on the empty string - otherwise we get IndexError
+        return ''
+    return s[0].upper() + s[1:]
 
 #it takes prefixes of symbols to be the 'head word'.
 with CleanImporter('pyparsing'):
