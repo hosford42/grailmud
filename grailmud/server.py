@@ -42,12 +42,6 @@ class ConnectionFactory(Factory):
         TargettableObject._name_registry = \
                                       self.root['targettable_objects_by_name']
     
-    def buildProtocol(self, address):
-        prot = self.protocol()
-        prot.factory = self
-        logging.debug("%r returned from Factory.buildProtocol." % prot)
-        return prot
-
     @property
     def ticker(self):
         return self.root['ticker']
