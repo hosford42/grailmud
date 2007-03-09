@@ -24,7 +24,8 @@ import grailmud
 from twisted.internet.protocol import Factory
 from grailmud.telnet import LoggerIn
 from grailmud.rooms import Room
-from grailmud.objects import MUDObject, TargettableObject
+from grailmud.objects import MUDObject, NamedObject
+from twisted.internet import reactor
 
 class ConnectionFactory(Factory):
     """The actual server factory."""
@@ -39,7 +40,7 @@ class ConnectionFactory(Factory):
         #unpickle everything, and thus insert them into _instances and whatnot.
         self.root['all_rooms']
         self.root['all_objects']
-        TargettableObject._name_registry = \
+        NamedObject._name_registry = \
                                       self.root['targettable_objects_by_name']
     
     @property
@@ -54,10 +55,17 @@ def commit_gameworld():
     #XXX: could be made more efficient by not re-committing everything, but
     #that would require making everything (and I mean -everything-) mutability
     #conscious.
-    root = grailmud.instance.objstore
-    root['all_rooms'] = Room._instances
-    root['all_objects'] = MUDObject._instances
-    root['targettable_objects_by_name'] = NamedObject._name_registry
-    root['ticker'] = grailmud.instance.ticker
-    root.commit()
-    root.ticker.add_command(commit_gameworld)
+    try:
+        root = grailmud.instance.root
+        root['all_rooms'] = Room._instances
+        root['all_objects'] = MUDObject._instances
+        root['targettable_objects_by_name'] = NamedObject._name_registry
+        root['ticker'] = grailmud.instance.ticker
+        grailmud.instance.objstore.commit()
+        grailmud.instance.objstore.pack()
+        grailmud.instance.ticker.add_command(commit_gameworld)
+    except:
+        logging.error("commit_gameworld experienced an error. Stopping the "
+                      "reactor.")
+        reactor.stop()
+        raise

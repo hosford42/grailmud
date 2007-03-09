@@ -105,8 +105,9 @@ class Test_receivedLine(SetupHelper):
 
     def setUp(self):
         self.issued = []
-        self.obj = Player('foo', '', set(), {'foo': self.record_command}, None,
+        self.obj = Player('foo', '', set(), None,
                           '')
+        self.obj.cmdict = {'foo': self.record_command}
 
     def tearDown(self):
         del NamedObject._name_registry[self.obj.name]

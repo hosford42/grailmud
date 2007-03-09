@@ -15,6 +15,9 @@ them here if they're major.
 
 * telnet.py doesn't close the connection correctly.
 
+* Turn some methods of Listeners which really ought to be events into (gasp!)
+events.
+
 For 0.2
 =======
 

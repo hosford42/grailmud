@@ -150,9 +150,8 @@ class NamedObject(TargettableObject):
 class Player(NamedObject):
     """A player avatar."""
 
-    def __init__(self, name, sdesc, adjs, cmdict, room, passhash):
+    def __init__(self, name, sdesc, adjs, room, passhash):
         self.connstate = 'online'
-        self.cmdict = cmdict
         self.passhash = passhash
         super(Player, self).__init__(sdesc, name, adjs, room)
 
@@ -175,7 +174,8 @@ class Player(NamedObject):
         #is using super correct here?
         state = NamedObject.__getstate__(self)
         state['connstate'] = 'offline'
-        return self
+        del state['cmdict']
+        return state
 
     def __setstate__(self, state):
         NamedObject.__setstate__(self, state)

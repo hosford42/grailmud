@@ -156,7 +156,7 @@ def test_AvatarHandler_initialisation_calls_login():
     telnet.login = fake_login
 
     mocktelnet = MockTelnet()
-    avatar = mocktelnet.avatar = Player("michael", "", set(), {}, 
+    avatar = mocktelnet.avatar = Player("michael", "", set(), 
                                         grailmud.instance.startroom, '')
     ah = AvatarHandler(mocktelnet, avatar)
 
@@ -169,7 +169,7 @@ class TestAvatarHandler:
             del NamedObject._name_registry['bob']
         self.telnet = MockTelnet()
         self.avatar = self.telnet.avatar = \
-                      Player("bob", "", set(), {}, 
+                      Player("bob", "", set(),
                              grailmud.instance.startroom, '')
         self.ah = AvatarHandler(self.telnet, self.avatar)
 

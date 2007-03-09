@@ -36,6 +36,7 @@ from grailmud.strutils import sanitise, alphatise, safetise, articleise, \
 import grailmud
 from grailmud.nvt import make_string_sane
 from functools import wraps
+from grailmud.utils import defaultinstancevariable
 
 #some random vaguely related TODOs:
 #-referential integrity when MUDObjects go POOF
@@ -179,6 +180,10 @@ class ChoiceHandler(ConnectionHandler):
         else:
             self.write("That is not a valid option.")
 
+@defaultinstancevariable(Player, "cmdict")
+def default_cmdict(self):
+    return get_actions()
+
 class CreationHandler(ConnectionHandler):
 
     #stop race conditions
@@ -251,7 +256,7 @@ class CreationHandler(ConnectionHandler):
         #TODO: we want finer-grained control over who gets what command. While
         #the current method is convenient, it's not really the best.
         self.adjs = set(word.lower() for word in line.split())
-        avatar = Player(self.name, self.sdesc, self.adjs, get_actions(),
+        avatar = Player(self.name, self.sdesc, self.adjs,
                         grailmud.instance.startroom, self.passhash)
         self.unlock_name()
         self.successor = AvatarHandler(self.telnet, avatar)

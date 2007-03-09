@@ -24,6 +24,7 @@ import logging
 from twisted.internet.task import LoopingCall
 import cgitb
 import sys
+from grailmud.server import commit_gameworld
 
 class WaitingForTick(object):
     """An object that'll wait for a certain number of ticks then executes a
@@ -56,7 +57,9 @@ class Ticker(object):
 
     def add_command(self, cmd):
         """Set a command to fire on the next tick."""
-        logging.debug("Adding %r to the ticker queue." % cmd)
+        #avoid logspam
+        if cmd is not commit_gameworld:
+            logging.debug("Adding %r to the ticker queue." % cmd)
         self.doing.append(cmd)
 
     def tick(self):
