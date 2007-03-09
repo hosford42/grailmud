@@ -1,3 +1,7 @@
+"""This module contains a tool for emulating a network virtual terminal. See
+RFC 854 for details.
+"""
+
 __copyright__ = """Copyright 2007 Sam Pointon"""
 
 __licence__ = """
@@ -28,10 +32,18 @@ toremove = set('\000' #NUL
 BS = '\010'
 
 def make_string_sane(string):
+    """Process (in most cases, this means 'ignore') the NVT characters in the
+    input string.
+    """
+    #simple characters don't need any special machinery.
     for char in toremove:
         string = string.replace(char, '')
-    string = string.lstrip(BS)
+    #do it backspace by backspace because otherwise, if there were multiple 
+    #backspaces in a row, it gets confused and backspaces over backspaces.
     while BS in string:
+        #take off leading backspaces so that the following regex doesn't get 
+        #confused.
+        string = string.lstrip(BS)
         string = re.sub('.' + BS, '', string, 1)
     return string
 

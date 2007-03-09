@@ -43,6 +43,10 @@ def test_backspace_handling_no_previous_characters_no_blow_up():
     s = '\010'
     assert make_string_sane(s) == ''
 
+def test_backspace_gone_too_far():
+    s = 'foo\010\010\010\010'
+    assert make_string_sane(s) == ''
+
 def test_backspace_no_interference():
     s = 'fooX\000\010'
     res = make_string_sane(s)
