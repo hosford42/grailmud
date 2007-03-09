@@ -13,6 +13,8 @@ completely as possible.
 * Go through the XXXes and TODOs in the code and organise them a bit, and list
 them here if they're major.
 
+* telnet.py doesn't close the connection correctly.
+
 For 0.2
 =======
 

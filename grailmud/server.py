@@ -50,3 +50,14 @@ class ConnectionFactory(Factory):
     def startroom(self):
         return self.root['startroom']
 
+def commit_gameworld():
+    #XXX: could be made more efficient by not re-committing everything, but
+    #that would require making everything (and I mean -everything-) mutability
+    #conscious.
+    root = grailmud.instance.objstore
+    root['all_rooms'] = Room._instances
+    root['all_objects'] = MUDObject._instances
+    root['targettable_objects_by_name'] = NamedObject._name_registry
+    root['ticker'] = grailmud.instance.ticker
+    root.commit()
+    root.ticker.add_command(commit_gameworld)

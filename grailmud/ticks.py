@@ -70,7 +70,6 @@ class Ticker(object):
                 logging.error(cgitb.text(sys.exc_info()))
                 #hm. we -could- reraise here, but I don't think it's the Right
                 #Thing to do.
-        grailmud.instance.objstore.commit()
 
     def __getstate__(self):
         return {'doing': self.doing, 'freq': self.freq}
