@@ -297,7 +297,7 @@ class LoginHandler(ConnectionHandler):
         line = safetise(line)
         passhash = sha(line).digest()
         try:
-            avatar = Player.get(line, passhash)
+            avatar = Player.get(self.name, passhash)
         except BadPassword, err:
             self.write("That password is invalid. Goodbye!")
             self.telnet.connectionLost(err)

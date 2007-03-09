@@ -24,7 +24,7 @@ import grailmud
 from twisted.internet.protocol import Factory
 from grailmud.telnet import LoggerIn
 from grailmud.rooms import Room
-from grailmud.objects import MUDObject, NamedObject
+from grailmud.objects import MUDObject, NamedObject, Player
 from twisted.internet import reactor
 
 class ConnectionFactory(Factory):
@@ -40,6 +40,9 @@ class ConnectionFactory(Factory):
         #unpickle everything, and thus insert them into _instances and whatnot.
         self.root['all_rooms']
         self.root['all_objects']
+        for playerobj in Player._instances:
+            if playerobj in playerobj.room:
+                playerobj.room.remove(playerobj)
         NamedObject._name_registry = \
                                       self.root['targettable_objects_by_name']
     

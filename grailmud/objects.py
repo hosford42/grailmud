@@ -174,12 +174,14 @@ class Player(NamedObject):
         #is using super correct here?
         state = NamedObject.__getstate__(self)
         state['connstate'] = 'offline'
-        del state['cmdict']
+        if 'cmdict' in state:
+            del state['cmdict']
+        if 'chunks' in state:
+            del state['chunks']
         return state
 
     def __setstate__(self, state):
         NamedObject.__setstate__(self, state)
-        self.room.remove(self)
 
     @staticmethod
     def get(name, passhash):
