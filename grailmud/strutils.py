@@ -1,5 +1,3 @@
-from __future__ import with_statement
-
 __copyright__ = """Copyright 2007 Sam Pointon"""
 
 __licence__ = """
@@ -20,7 +18,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 """
 
 from string import printable, whitespace, ascii_letters, digits, punctuation
-from grailmud.cleanimporter import CleanImporter
+from pyparsing import Word, Optional
 
 #I don't know either, but some modules want this
 printables = printable
@@ -56,10 +54,8 @@ def capitalise(s):
     return s[0].upper() + s[1:]
 
 #it takes prefixes of symbols to be the 'head word'.
-with CleanImporter('pyparsing'):
-    # pylint: disable-msg=E0602
-    _hwspattern = (Word(punctuation) + Optional(Word(alnumspace))) ^ \
-                  (Optional(Word(nwprintable)) + Optional(Word(printable)))
+_hwspattern = (Word(punctuation) + Optional(Word(alnumspace))) ^ \
+              (Optional(Word(nwprintable)) + Optional(Word(printable)))
 
 #XXX: tabs. watch it blow up!
 
