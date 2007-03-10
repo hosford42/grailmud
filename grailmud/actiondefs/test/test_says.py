@@ -61,63 +61,63 @@ class TestEventSending(SetupHelper):
 
     def test_speak_actor_receives_event(self):
         speak(self.actor, "foo")
-        assert self.actor.listener.received == [SpeakNormalFirstEvent("foo")]
+        assert self.actor.delegate.received == [SpeakNormalFirstEvent("foo")]
 
     def test_speak_room_receives_event(self):
         speak(self.actor, "foo")
-        assert self.target.listener.received == \
+        assert self.target.delegate.received == \
                                   [SpeakNormalThirdEvent(self.actor, "foo")]
 
     def test_speakTo_actor_receives_event(self):
         speakTo(self.actor, self.target, "foo")
-        assert self.actor.listener.received == [SpeakToFirstEvent(self.target,
+        assert self.actor.delegate.received == [SpeakToFirstEvent(self.target,
                                                                   "foo")]
 
     def test_speakTo_target_receives_event(self):
         speakTo(self.actor, self.target, "foo")
-        print self.target.listener.received
-        assert self.target.listener.received == [SpeakToSecondEvent(self.actor,
+        print self.target.delegate.received
+        assert self.target.delegate.received == [SpeakToSecondEvent(self.actor,
                                                                     "foo")]
 
     def test_speakTo_room_receives_event(self):
         speakTo(self.actor, self.target, "foo")
-        assert self.onlooker.listener.received == \
+        assert self.onlooker.delegate.received == \
                           [SpeakToThirdEvent(self.actor, self.target, "foo")]
 
     def test_speakTo_fails_with_nonTargettableObject(self):
         speakTo(self.actor, MUDObject(None), "foo")
-        assert self.actor.listener.received == [UnfoundObjectEvent()]
+        assert self.actor.delegate.received == [UnfoundObjectEvent()]
 
     def test_speakTo_fails_target_out_of_room(self):
         speakTo(self.actor, self.other_room_target, "foo")
-        assert self.actor.listener.received == [UnfoundObjectEvent()]
+        assert self.actor.delegate.received == [UnfoundObjectEvent()]
 
     def test_speakToWrapper_success(self):
         speakToWrapper(self.actor, "rabbit, foo", self.info)
-        print self.actor.listener.received[0].__dict__
-        assert self.actor.listener.received == [SpeakToFirstEvent(self.target,
+        print self.actor.delegate.received[0].__dict__
+        assert self.actor.delegate.received == [SpeakToFirstEvent(self.target,
                                                                   "foo")]
 
     def test_speakToWrapper_success_multiword(self):
         speakToWrapper(self.actor, "rabbit, foo bar", self.info)
-        print self.actor.listener.received
-        print self.actor.listener.received[0].__dict__
-        assert self.actor.listener.received == [SpeakToFirstEvent(self.target,
+        print self.actor.delegate.received
+        print self.actor.delegate.received[0].__dict__
+        assert self.actor.delegate.received == [SpeakToFirstEvent(self.target,
                                                                   "foo bar")]
 
     def test_speakToWrapper_parsing_failure(self):
         speakToWrapper(self.actor, "bogusinputomatic", self.info)
-        assert self.actor.listener.received == [BadSyntaxEvent(None)]
+        assert self.actor.delegate.received == [BadSyntaxEvent(None)]
 
     def test_speakToWrapper_finding_target_failure(self):
         speakToWrapper(self.actor, "bogus target, foo", self.info)
-        assert self.actor.listener.received == [UnfoundObjectEvent()]
+        assert self.actor.delegate.received == [UnfoundObjectEvent()]
 
     def test_speakToWrapper_with_target(self):
         targetSet(self.actor, "foo", self.target)
-        self.actor.listener.received = []
+        self.actor.delegate.received = []
         speakToWrapper(self.actor, "$foo, bar", self.info)
-        res = self.actor.listener.received
+        res = self.actor.delegate.received
         print res
         assert res == [SpeakToFirstEvent(self.target, "bar")]
 

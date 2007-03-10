@@ -40,7 +40,7 @@ class TestunfoundAction(SetupHelper):
 
     def test_receive_event(self):
         unfoundAction(self.obj, '', None)
-        assert self.obj.listener.received == [UnfoundActionEvent()]
+        assert self.obj.delegate.received == [UnfoundActionEvent()]
 
 class Testshorttarget_pattern(object):
 

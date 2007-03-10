@@ -23,31 +23,31 @@ from grailmud.actiondefs.more import displayMore
 from grailmud.objects import Player
 from grailmud.utils import defaultinstancevariable
 
-class Listener(object):
-    '''Base class for listeners.'''
+class Delegate(object):
+    '''Base class for delegates.'''
 
     _pickleme = True
 
     def __init__(self):
-        self.listening = set()
+        self.delegating = set()
 
     def register(self, source):
-        """Register ourselves as a listener."""
-        self.listening.add(source)
+        """Register ourselves as a delegate."""
+        self.delegating.add(source)
 
     def unregister(self, source):
-        """Unregister ourselves as a listener."""
-        self.listening.remove(source)
+        """Unregister ourselves as a delegate."""
+        self.delegating.remove(source)
 
     def disconnecting(self, source):
         '''Acknowledge that an object has disconnected.'''
-        source.removeListener(self)
+        source.removeDelegate(self)
 
     def transferControl(self, source, new):
-        source.removeListener(self)
-        new.addListener(self)
+        source.removeDelegate(self)
+        new.addDelegate(self)
 
-    def listenToEvent(self, obj, event):
+    def delegateToEvent(self, obj, event):
         raise NotImplementedError()
 
 @defaultinstancevariable(Player, "more_limiter")
@@ -62,7 +62,7 @@ def chunks(self):
 def chunked_event(self):
     return None
 
-class ConnectionState(Listener):
+class ConnectionState(Delegate):
     """Represents the state of the connection to the events as they collapse 
     to text."""
 
@@ -74,7 +74,7 @@ class ConnectionState(Listener):
         self.on_prompt = False
         self.want_prompt = True
         self.nonce = {}
-        Listener.__init__(self)
+        Delegate.__init__(self)
         self.chunking = False
 
     def avatar_get(self):
@@ -148,7 +148,7 @@ class ConnectionState(Listener):
         self.forcePrompt()
         self.forceNewline()
 
-    def listenToEvent(self, obj, event):
+    def delegateToEvent(self, obj, event):
         """Collapse an event to text."""
         logging.debug("Handling event %r." % event)
         event.collapseToText(self, self.avatar)
@@ -171,17 +171,17 @@ class ConnectionState(Listener):
     def disconnecting(self, obj):
         if obj is self.avatar:
             #our avatar is disconnecting: we need to tell our telnet to close.
-            #self.listening may be mutated by the listenees removal
-            for listening_to in self.listening.copy():
-                listening_to.removeListener(self)
+            #self.delegating may be mutated by the delegateees removal
+            for delegating_to in self.delegating.copy():
+                delegating_to.removeDelegate(self)
             logging.debug("Disconnecting the telnet instance.")
             self.telnet.close()
         else:
             #this is in an else block because this implies a call to
-            #the removeListener of our avatar, which would blow up.
-            Listener.disconnecting(self, obj)
+            #the removeDelegate of our avatar, which would blow up.
+            Delegate.disconnecting(self, obj)
 
     def transferControl(self, source, other):
         if source is self.avatar:
             self.avatar = other
-        Listener.transferControl(self, source, other)
+        Delegate.transferControl(self, source, other)

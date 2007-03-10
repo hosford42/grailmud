@@ -47,24 +47,24 @@ class TestEvents(SetupHelper):
     def test_ldesc_event(self):
         desc = "foo bar"
         setLDesc(self.obj, desc)
-        assert self.obj.listener.received == [LDescSetEvent(desc)]
+        assert self.obj.delegate.received == [LDescSetEvent(desc)]
 
     def test_parsing_ldesc(self):
         desc = "foo bar"
         setDistribute(self.obj, "ldesc %s" % desc, None)
-        print self.obj.listener.received
-        assert self.obj.listener.received == [LDescSetEvent(desc)]
+        print self.obj.delegate.received
+        assert self.obj.delegate.received == [LDescSetEvent(desc)]
 
     def test_bad_syntaxes(self):
         for evilbad in ["foo", "bar baz", "quuux"]:
             setDistribute(self.obj, evilbad, None)
-            print self.obj.listener.received
-            assert self.obj.listener.received == \
+            print self.obj.delegate.received
+            assert self.obj.delegate.received == \
                                      [BadSyntaxEvent(syntax_message % evilbad)]
-            self.obj.listener.received = []
+            self.obj.delegate.received = []
             
     def test_parsing_ldesc_ignores_leading_spaces(self):
         desc = '    foo bar'
         setDistribute(self.obj, 'ldesc %s' % desc, None)
-        assert self.obj.listener.received == [LDescSetEvent('foo bar')]
+        assert self.obj.delegate.received == [LDescSetEvent('foo bar')]
         assert self.obj.ldesc == 'foo bar'

@@ -21,7 +21,7 @@ from grailmud.objects import MUDObject, TargettableObject, NamedObject, \
                              Player, TargettableExitObject
 from grailmud.events import BaseEvent
 import pickle
-from grailmud.utils_for_testing import MockListener as ListenerHelper, \
+from grailmud.utils_for_testing import MockDelegate as DelegateHelper, \
         SetupHelper
 
 #XXX: I would -love- to have some proper tests for pickling here, but 
@@ -41,7 +41,7 @@ def test_at_least_calls_the_base___Xstate__():
 
 def test_register():
     obj = MUDObject(None)
-    obj.addListener(ListenerHelper(obj))
+    obj.addDelegate(DelegateHelper(obj))
 
 def test_equality():
     m = MUDObject(None)
@@ -56,23 +56,23 @@ class TesterForListening(object):
 
     def setUp(self):
         self.obj = MUDObject(None)
-        self.obj.addListener(ListenerHelper(self.obj))
+        self.obj.addDelegate(DelegateHelper(self.obj))
         
     def test_unregister(self):
-        self.obj.removeListener(self.obj.listener)
+        self.obj.removeDelegate(self.obj.delegate)
 
     def test_event_passing(self):
         self.obj.receiveEvent(BaseEvent())
-        assert self.obj.listener.received == [BaseEvent()]
+        assert self.obj.delegate.received == [BaseEvent()]
 
     def test_event_flushing(self):
         self.obj.eventFlush()
-        assert self.obj.listener.flushed
+        assert self.obj.delegate.flushed
 
     def test_bad_unregister(self):
-        self.obj.listeners.remove(self.obj.listener)
+        self.obj.delegates.remove(self.obj.delegate)
         try:
-            self.obj.removeListener(self.obj.listener)
+            self.obj.removeDelegate(self.obj.delegate)
         except ValueError:
             pass
         else:
@@ -80,7 +80,7 @@ class TesterForListening(object):
 
     def test_bad_register(self):
         try:
-            self.obj.addListener(self.obj.listener)
+            self.obj.addDelegate(self.obj.delegate)
         except ValueError:
             pass
         else:

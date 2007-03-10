@@ -30,7 +30,7 @@ from grailmud.objects import Player, BadPassword, NamedObject
 from grailmud.actions import get_actions
 from grailmud.actiondefs.logoff import logoffFinal
 from grailmud.actiondefs.login import login
-from grailmud.listeners import ConnectionState
+from grailmud.delegates import ConnectionState
 from grailmud.strutils import sanitise, alphatise, safetise, articleise, \
                             wsnormalise
 import grailmud
@@ -311,7 +311,7 @@ class AvatarHandler(ConnectionHandler):
         self.avatar = avatar
         
         self.connection_state = ConnectionState(self.telnet)
-        self.avatar.addListener(self.connection_state)
+        self.avatar.addDelegate(self.connection_state)
         self.avatar.room.add(self.avatar)
         login(self.avatar)
         self.connection_state.eventListenFlush(self.avatar)

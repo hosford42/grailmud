@@ -40,23 +40,23 @@ class TestMore(SetupHelper):
         self.obj.chunks = self.obj.more_limiter.chunk(data)
         
         displayMore(self.obj)
-        assert self.obj.listener.received == [MoreEvent('foo\n' * 10,
+        assert self.obj.delegate.received == [MoreEvent('foo\n' * 10,
                                                         30, 20)]
-        self.obj.listener.received = []
+        self.obj.delegate.received = []
         displayMore(self.obj)
-        assert self.obj.listener.received == [MoreEvent('foo\n' * 10,
+        assert self.obj.delegate.received == [MoreEvent('foo\n' * 10,
                                                         30, 10)]
-        self.obj.listener.received = []
+        self.obj.delegate.received = []
         displayMore(self.obj)
-        assert self.obj.listener.received == [MoreEvent('foo\n' * 9,
+        assert self.obj.delegate.received == [MoreEvent('foo\n' * 9,
                                                         30, 0)]
-        self.obj.listener.received = []
+        self.obj.delegate.received = []
 
     def test_no_more_event(self):
         self.obj.chunks = self.obj.more_limiter.chunk('')
 
         displayMore(self.obj)
-        self.obj.listener.received = []
+        self.obj.delegate.received = []
         
         displayMore(self.obj)
-        assert self.obj.listener.received == [NoMoreEvent()]
+        assert self.obj.delegate.received == [NoMoreEvent()]

@@ -37,24 +37,24 @@ class TestEventSending(SetupHelper):
 
     def test_whoHere_event_sending(self):
         whoHere(self.actor)
-        assert self.actor.listener.received == \
+        assert self.actor.delegate.received == \
                                            [WhoHereEvent(self.room.contents)]
 
     def test_who_event_sending(self):
         who(self.actor)
-        assert self.actor.listener.received == [WhoEvent(self.actor)]
+        assert self.actor.delegate.received == [WhoEvent(self.actor)]
 
     def test_who_here_parsing(self):
         whoDistributor(self.actor, "here", None)
-        assert self.actor.listener.received == \
+        assert self.actor.delegate.received == \
                                            [WhoHereEvent(self.room.contents)]
 
     def test_who_parsing_default(self):
         whoDistributor(self.actor, "bogus option", None)
-        assert self.actor.listener.received == [WhoEvent(self.actor)]
+        assert self.actor.delegate.received == [WhoEvent(self.actor)]
 
     def test_who_parsing_blank(self):
         whoDistributor(self.actor, "", None)
-        assert self.actor.listener.received == [WhoEvent(self.actor)]
+        assert self.actor.delegate.received == [WhoEvent(self.actor)]
 
 

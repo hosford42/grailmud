@@ -5,7 +5,7 @@ The stuff what does need doing
 For 0.1
 =======
 
-* Test ``telnet.py``, ``objects.py``, ``listeners.py`` and ``rooms.py`` as
+* Test ``telnet.py``, ``objects.py``, ``delegatess.py`` and ``rooms.py`` as
 completely as possible.
 
 * Test ``actiondefs/login.py`` and ``actiondefs/logoff.py`` a bit.
@@ -38,5 +38,4 @@ Just nice to have
 * More documentation. Particularly, tutorials and high-level descriptions might
 be nice.
 
-* Renaming of names! 'Listener' to 'Delegate', and sorting out the hodge-podge
-of camelCase method and function names.
+* Sort out the hodge-podge of camelCase method and function names.

@@ -33,10 +33,10 @@ possibly resulting in ridiculous duplication like different 'take away *X*
 hitpoints' routines for each type, which should reside in a common base class.
 
 Decoupling object logic and object state results in promoting 'controllers' 
-(or as they ended up being called in the codebase, *listeners*, because they 
-listen to events) to first-class objects which can be added or removed from 
-objects at will. So if you want a staff to suddenly start acting like a goblin
-chief, it becomes as simple as this::
+(or as they ended up being called in the codebase, *delegates*, in the Self 
+tradition) to first-class objects which can be added or removed from objects
+at will. So if you want a staff to suddenly start acting like a goblin chief,
+it becomes as simple as this::
 
     staff.addListener(GoblinChiefLogic())
 

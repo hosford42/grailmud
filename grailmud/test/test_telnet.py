@@ -173,8 +173,8 @@ class TestAvatarHandler:
                              grailmud.instance.startroom, '')
         self.ah = AvatarHandler(self.telnet, self.avatar)
 
-    def test_initialisation_listener_adding(self):
-        assert self.ah.connection_state in self.avatar.listeners
+    def test_initialisation_delegate_adding(self):
+        assert self.ah.connection_state in self.avatar.delegates
 
     def test_initialisation_room_adding(self):
         assert self.avatar in grailmud.instance.startroom

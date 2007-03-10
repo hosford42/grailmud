@@ -66,17 +66,17 @@ class TestEventSending(SetupHelper):
 
     def test_event_sending_success(self):
         list_commands(self.obj)
-        assert self.obj.listener.received == [CommandListEvent(self.expected)]
+        assert self.obj.delegate.received == [CommandListEvent(self.expected)]
 
     def test_event_sending_no_cmd_list(self):
         list_commands(self.failobj)
-        assert self.failobj.listener.received == [NoCommandListEvent()]
+        assert self.failobj.delegate.received == [NoCommandListEvent()]
 
     def test_wrapper_success(self):
         d = {}
         register(d)
         d['commands'](self.obj, '', None)
-        assert self.obj.listener.received == [CommandListEvent(self.expected)]
+        assert self.obj.delegate.received == [CommandListEvent(self.expected)]
 
 
 from grailmud.actiondefs.commands import register

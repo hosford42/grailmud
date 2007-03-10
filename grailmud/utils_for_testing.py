@@ -19,28 +19,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 
 from grailmud.objects import MUDObject
 
-class MockListener(object):
+class MockDelegate(object):
 
     def __init__(self, obj = None):
         self.received = []
         self.flushed = False
         if obj is not None:
             self.obj = obj
-            self.obj.listener = self
+            self.obj.delegate = self
 
     def register(self, obj):
         if hasattr(self, 'obj'):
             assert obj is self.obj
-            assert self in obj.listeners
+            assert self in obj.delegates
         else:
             self.obj = obj
-            obj.listener = self
+            obj.delegate = self
 
     def unregister(self, obj):
         assert obj is self.obj
-        assert self not in obj.listeners
+        assert self not in obj.delegates
 
-    def listenToEvent(self, obj, event):
+    def delegateToEvent(self, obj, event):
         assert obj is self.obj
         self.received.append(event)
 
@@ -53,8 +53,8 @@ class SetupHelper(object):
     def setup_for_object(self, obj):
         if hasattr(self, 'room'):
             self.room.add(obj)
-        obj.listener = MockListener()
-        obj.addListener(obj.listener)
+        obj.delegate = MockDelegate()
+        obj.addDelegate(obj.delegate)
 
     def setUp(self):
         self.obj = MUDObject(None)

@@ -75,48 +75,48 @@ class TestEventSending(SetupHelper):
     def test_look_at_room_TargettableObject(self):
         lookAt(self.actor, self.roomtarget)
 
-        assert self.actor.listener.received == [LookAtEvent(self.roomtarget)]
+        assert self.actor.delegate.received == [LookAtEvent(self.roomtarget)]
 
     def test_look_at_inventory_TargettableObject(self):
         lookAt(self.actor, self.invtarget)
 
-        assert self.actor.listener.received == [LookAtEvent(self.invtarget)]
+        assert self.actor.delegate.received == [LookAtEvent(self.invtarget)]
         
     def test_look_at_nowhere(self):
         lookAt(self.actor, MUDObject(None))
 
-        assert self.actor.listener.received == [UnfoundObjectEvent()]
+        assert self.actor.delegate.received == [UnfoundObjectEvent()]
 
     def test_look_at_room(self):
         lookRoom(self.actor)
 
-        assert self.actor.listener.received == [LookRoomEvent(self.room)]
+        assert self.actor.delegate.received == [LookRoomEvent(self.room)]
 
     def test_look_at_exit(self):
         lookAt(self.actor, self.exit)
 
-        assert self.actor.listener.received == [LookRoomEvent(self.otherroom)]
+        assert self.actor.delegate.received == [LookRoomEvent(self.otherroom)]
 
     def test_look_at_parsing_no_at(self):
         lookDistributor(self.actor, 'boris', self.info)
 
-        print self.actor.listener.received
-        assert self.actor.listener.received == [LookAtEvent(self.invtarget)]
+        print self.actor.delegate.received
+        assert self.actor.delegate.received == [LookAtEvent(self.invtarget)]
 
     def test_look_at_parsing(self):
         lookDistributor(self.actor, "at killer rabbit", self.info)
 
-        print self.actor.listener.received
-        assert self.actor.listener.received == [LookAtEvent(self.roomtarget)]
+        print self.actor.delegate.received
+        assert self.actor.delegate.received == [LookAtEvent(self.roomtarget)]
 
     def test_look_at_parsing_failure(self):
         lookDistributor(self.actor, "at foobar", self.info)
 
-        assert self.actor.listener.received == [UnfoundObjectEvent()]
+        assert self.actor.delegate.received == [UnfoundObjectEvent()]
 
     def test_look_parsing(self):
         lookDistributor(self.actor, "", self.info)
 
-        print self.actor.listener.received
-        assert self.actor.listener.received == [LookRoomEvent(self.room)]
+        print self.actor.delegate.received
+        assert self.actor.delegate.received == [LookRoomEvent(self.room)]
     

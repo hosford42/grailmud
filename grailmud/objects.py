@@ -1,5 +1,5 @@
 """This file contains an implementation of objects in the MUD and a simple
-interface for hooking them up with listeners and events.
+interface for hooking them up with delegates and events.
 """
 
 __copyright__ = """Copyright 2007 Sam Pointon"""
@@ -37,41 +37,41 @@ class MUDObject(BothAtOnce):
     
     def __init__(self, room):
         self.room = room
-        self.listeners = set()
+        self.delegates = set()
         self.inventory = Room("A dummy inventory.", "This is a dummy "
                               "inventory, to make the checking code a little "
                               "bit simpler.")
     
     def eventFlush(self):
-        """Tell the listeners that the current lot of events are done."""
-        for listener in self.listeners:
-            listener.eventListenFlush(self)
+        """Tell the delegates that the current lot of events are done."""
+        for delegate in self.delegates:
+            delegate.eventListenFlush(self)
 
-    def addListener(self, listener):
-        """Register a new listener.
+    def addDelegate(self, delegate):
+        """Register a new delegate.
 
-        Throws a ValueError if it's already listening."""
-        if listener in self.listeners:
-            raise ValueError("Listener is already listening.")
-        self.listeners.add(listener)
-        listener.register(self)
+        Throws a ValueError if it's already delegating."""
+        if delegate in self.delegates:
+            raise ValueError("Delegate is already delegating.")
+        self.delegates.add(delegate)
+        delegate.register(self)
 
-    def removeListener(self, listener):
-        """Remove a listener. Throws errors if it's not currently listening.
+    def removeDelegate(self, delegate):
+        """Remove a delegate. Throws errors if it's not currently delegating.
         """
-        if listener not in self.listeners:
-            raise ValueError("Listener is not listening.")
-        self.listeners.remove(listener)
-        listener.unregister(self)
+        if delegate not in self.delegates:
+            raise ValueError("Delegate is not delegating.")
+        self.delegates.remove(delegate)
+        delegate.unregister(self)
 
     #XXX: these two methods should be reimplemented as events.
     def transferControl(self, obj):
-        """Utility method to shift all the listeners to another object."""
-        for listener in self.listeners:
-            listener.transferControl(self, obj)
+        """Utility method to shift all the delegates to another object."""
+        for delegate in self.delegates:
+            delegate.transferControl(self, obj)
 
     def disconnect(self):
-        '''Notify the listeners that this object is being disconnected.
+        '''Notify the delegates that this object is being disconnected.
 
         Note that this only makes sense for Players, but it needs to be on
         here else AttributeErrors will start flying around. I think. So we
@@ -80,10 +80,10 @@ class MUDObject(BothAtOnce):
         pass
 
     def __getstate__(self):
-        listeners = set(listener for listener in self.listeners
-                        if listener._pickleme)
+        delegates = set(delegate for delegate in self.delegates
+                        if delegate._pickleme)
         state = BothAtOnce.__getstate__(self)
-        state['listeners'] = listeners
+        state['delegates'] = delegates
         return state
 
     receiveEvent = Multimethod()
@@ -92,10 +92,10 @@ class MUDObject(BothAtOnce):
 def receiveEvent(self, event):
     """Receive an event in the MUD.
 
-    This is the very basic handler for objects that can be listened to.
+    This is the very basic handler for objects that can be delegateed to.
     """
-    for listener in self.listeners:
-        listener.listenToEvent(self, event)
+    for delegate in self.delegates:
+        delegate.delegateToEvent(self, event)
 
 class TargettableObject(MUDObject):
     """A tangible object, that can be generically targetted."""
@@ -164,10 +164,10 @@ class Player(NamedObject):
         func(self, rest, info)
 
     def disconnect(self):
-        '''Notify the listeners that we are being disconnected.'''
-        for listener in self.listeners.copy(): #copy because we mutate it
-            listener.disconnecting(self)
-            #no self.removeListener(listener) here because it's a little silly
+        '''Notify the delegates that we are being disconnected.'''
+        for delegate in self.delegates.copy(): #copy because we mutate it
+            delegate.disconnecting(self)
+            #no self.removeDelegate(delegate) here because it's a little silly
             #to not have it implied.
 
     def __getstate__(self):

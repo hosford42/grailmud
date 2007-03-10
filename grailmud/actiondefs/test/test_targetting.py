@@ -98,7 +98,7 @@ class TestActualEvents(SetupHelper):
 
     def test_targetSet_messages(self):
         targetSet(self.actor, "robert", self.target)
-        assert self.actor.listener.received == [TargetSetEvent("robert",
+        assert self.actor.delegate.received == [TargetSetEvent("robert",
                                                                self.target)]
 
     def test_targetClear_success(self):
@@ -109,7 +109,7 @@ class TestActualEvents(SetupHelper):
     def test_targetClear_success_messages(self):
         self.actor.targetting_shorts['bob'] = self.target
         targetClear(self.actor, 'bob')
-        assert self.actor.listener.received == [TargetClearedEvent("bob")]
+        assert self.actor.delegate.received == [TargetClearedEvent("bob")]
 
     def test_targetClear_fail(self):
         targetClear(self.actor, "mike")
@@ -117,21 +117,21 @@ class TestActualEvents(SetupHelper):
 
     def test_targetClear_messages(self):
         targetClear(self.actor, "mike")
-        assert self.actor.listener.received == \
+        assert self.actor.delegate.received == \
                                           [TargetAlreadyClearedEvent('mike')]
 
     def test_targetList_messages(self):
         targetList(self.actor)
-        assert self.actor.listener.received == [TargetListEvent(self.actor)]
+        assert self.actor.delegate.received == [TargetListEvent(self.actor)]
 
     def test_targetSet_parsing(self):
         targetDistributor(self.actor, "set $mike to killer rabbit", self.info)
-        assert self.actor.listener.received == [TargetSetEvent("mike",
+        assert self.actor.delegate.received == [TargetSetEvent("mike",
                                                                self.target)]
 
     def test_targetSet_parsing_failure(self):
         targetDistributor(self.actor, "set $mike to bogus object", self.info)
-        assert self.actor.listener.received == [UnfoundObjectEvent()]
+        assert self.actor.delegate.received == [UnfoundObjectEvent()]
 
     def test_targetSet_caseless(self):
         targetDistributor(self.actor, "set $ROBERT to rabbit", self.info)
@@ -140,15 +140,15 @@ class TestActualEvents(SetupHelper):
     def test_targetClear_parsing(self):
         self.actor.targetting_shorts['bob'] = self.target
         targetDistributor(self.actor, "clear $bob", self.info)
-        print self.actor.listener.received
-        assert self.actor.listener.received == [TargetClearedEvent("bob")]
+        print self.actor.delegate.received
+        assert self.actor.delegate.received == [TargetClearedEvent("bob")]
 
     def test_targetClear_parsing_caseless(self):
         self.actor.targetting_shorts['bob'] = self.target
         targetDistributor(self.actor, "clear $BOB", self.info)
-        print self.actor.listener.received
-        assert self.actor.listener.received == [TargetClearedEvent("bob")]
+        print self.actor.delegate.received
+        assert self.actor.delegate.received == [TargetClearedEvent("bob")]
 
     def test_bogus_syntax(self):
         targetDistributor(self.actor, "bogus syntax", self.info)
-        assert self.actor.listener.received == [BadSyntaxEvent(None)]
+        assert self.actor.delegate.received == [BadSyntaxEvent(None)]

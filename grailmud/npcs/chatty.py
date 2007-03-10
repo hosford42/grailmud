@@ -28,10 +28,10 @@ from grailmud.actiondefs.system import UnfoundObjectEvent
 from grailmud.actiondefs.emote import yanked_emotes, emote
 from grailmud.actiondefs.says import SpeakToSecondEvent, speakTo
 from grailmud.objects import MUDObject
-from grailmud.listeners import Listener
+from grailmud.delegates import Delegate
 from .elizaimpl import Therapist
 
-class ChattyListener(Listener):
+class ChattyDelegate(Delegate):
     """An NPC that psychoanalyses you.
 
     In communist Russia, you psychoanalyse an NPC!
@@ -40,7 +40,7 @@ class ChattyListener(Listener):
 
     def __init__(self, avatar):
         self.avatar = avatar
-        Listener.__init__(self)
+        Delegate.__init__(self)
         #ideally, each individual object would be given its own therapist on
         #demand, but that would require some way of keeping referential
         #integrity intact if they're removed from the gameworld.
@@ -48,17 +48,17 @@ class ChattyListener(Listener):
         self.lastchatted = None
         self.therapist = None
 
-    listenToEvent = Multimethod()
+    delegateToEvent = Multimethod()
 
-@ChattyListener.listenToEvent.register(ChattyListener, MUDObject, BaseEvent)
-def listenToEvent(self, obj, event):
+@ChattyDelegate.delegateToEvent.register(ChattyDelegate, MUDObject, BaseEvent)
+def delegateToEvent(self, obj, event):
     """Events we don't care about will come down to here, so just ignore them.
     """
     pass
 
-@ChattyListener.listenToEvent.register(ChattyListener, MUDObject,
+@ChattyDelegate.delegateToEvent.register(ChattyDelegate, MUDObject,
                                        SpeakToSecondEvent)
-def listenToEvent(self, obj, event):
+def delegateToEvent(self, obj, event):
     '''Someone has said something to us. It's only polite to respond!'''
     text = event.text
     actor = event.actor
@@ -70,9 +70,9 @@ def listenToEvent(self, obj, event):
         self.lastchatted = actor
     speakTo(self.avatar, actor, self.therapist.chat(text))
 
-@ChattyListener.listenToEvent.register(ChattyListener, MUDObject,
+@ChattyDelegate.delegateToEvent.register(ChattyDelegate, MUDObject,
                                        UnfoundObjectEvent)
-def listenToEvent(self, obj, event):
+def delegateToEvent(self, obj, event):
     '''Someone we tried to do something to wasn't there.'''
     emote(self.avatar,
           "You look up and around, as if searching for someone, but look down "
