@@ -10,3 +10,5 @@ New in grailmud 0.1a3
 * Proper handling of telnet NVT commands (especially backspace).
 
 * Got object serialisation more-or-less working. Well, in a hackish sense.
+
+* 'listeners' have been renamed to 'delegates'.
