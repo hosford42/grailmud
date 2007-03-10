@@ -38,13 +38,18 @@ class ConnectionFactory(Factory):
         self.root = self.objstore.get_root()
         #these look like no-ops, but they're not. Accessing them ought to 
         #unpickle everything, and thus insert them into _instances and whatnot.
-        self.root['all_rooms']
-        self.root['all_objects']
-        for playerobj in Player._instances:
-            if playerobj in playerobj.room:
-                playerobj.room.remove(playerobj)
-        NamedObject._name_registry = \
+        try:
+            self.root['all_rooms']
+            self.root['all_objects']
+            for playerobj in Player._instances:
+                if playerobj in playerobj.room:
+                    playerobj.room.remove(playerobj)
+            NamedObject._name_registry = \
                                       self.root['targettable_objects_by_name']
+        except:
+            logging.info("Loading the mudlib failed at some point. Consider "
+                         "regenerating it with create_mudlib.py.")
+            raise
     
     @property
     def ticker(self):

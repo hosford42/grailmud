@@ -40,7 +40,7 @@ def construct_mud(objstorethunk):
 
 def run_mud(mud, port):
     """Run the MUD factory."""
-    reactor.delegateTCP(port, mud)
+    reactor.listenTCP(port, mud)
     mud.ticker.add_command(commit_gameworld)
     mud.ticker.start()
     logging.info("OK, setup done, handing you over to the reactor's loop!")
