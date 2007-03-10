@@ -1,5 +1,4 @@
 from __future__ import absolute_import
-from __future__ import with_statement
 
 __copyright__ = """Copyright 2007 Sam Pointon"""
 
@@ -21,13 +20,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 """
 
 from grailmud.events import BaseEvent
-from grailmud.cleanimporter import CleanImporter
 from grailmud.utils import promptcolour, defaultinstancevariable
 from grailmud.objects import TargettableObject
 from .system import badSyntax
 from string import whitespace
 from grailmud.strutils import wsnormalise, printable
-from pyparsing import ParseException
+from pyparsing import ParseException, Suppress, Word
 
 class LDescSetEvent(BaseEvent):
 
@@ -43,9 +41,7 @@ class LDescSetEvent(BaseEvent):
         return "%s(%r)" % (type(self).__name__, self.desc)
 
 #I don't know how or why this works, but it does.
-with CleanImporter("pyparsing"):
-    # pylint: disable-msg=E0602
-    ldesc_pattern = Suppress("ldesc") + Word(printable)
+ldesc_pattern = Suppress("ldesc") + Word(printable)
 
 syntax_message = "'%r' is an unknown option for the 'set' action."
 

@@ -1,5 +1,3 @@
-from __future__ import with_statement
-
 __copyright__ = """Copyright 2007 Sam Pointon"""
 
 __licence__ = """
@@ -24,16 +22,14 @@ from grailmud.multimethod import Multimethod
 from grailmud.rooms import UnfoundError
 from grailmud.events import SystemEvent
 import logging
-from grailmud.cleanimporter import CleanImporter
+from pyparsing import Group, Suppress, Word, OneOrMore, Optional
 
 #Some utilities.
-with CleanImporter('pyparsing'):
-    # pylint: disable-msg=E0602
-    shorttarget_pattern = Group(Suppress('$') + Word(ascii_letters + digits))
-    adjs_pattern = Group(Group(OneOrMore(Word(ascii_letters))) + 
-                         Optional(Word(digits), "0"))
+shorttarget_pattern = Group(Suppress('$') + Word(ascii_letters + digits))
+adjs_pattern = Group(Group(OneOrMore(Word(ascii_letters))) + 
+                        Optional(Word(digits), "0"))
 
-    object_pattern = adjs_pattern ^ shorttarget_pattern
+object_pattern = adjs_pattern ^ shorttarget_pattern
 
 class UnfoundActionEvent(SystemEvent):
 

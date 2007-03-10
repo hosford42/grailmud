@@ -1,4 +1,3 @@
-from __future__ import with_statement
 from __future__ import absolute_import
 
 __copyright__ = """Copyright 2007 Sam Pointon"""
@@ -20,7 +19,6 @@ grailmud (in the file named LICENSE); if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 """
 
-from grailmud.cleanimporter import CleanImporter
 from .core import object_pattern
 from grailmud.events import VisibleEvent
 from grailmud.rooms import UnfoundError
@@ -29,7 +27,7 @@ from grailmud.objects import Player, TargettableObject, ExitObject, MUDObject
 from grailmud.strutils import capitalise
 from grailmud.utils import promptcolour, get_from_rooms, distributeEvent
 from grailmud.multimethod import Multimethod
-from pyparsing import ParseException
+from pyparsing import ParseException, Suppress, Optional, Keyword
 
 class LookAtEvent(VisibleEvent):
 
@@ -55,10 +53,7 @@ class LookRoomEvent(VisibleEvent):
                       for obj in self.room.contents]
         state.sendEventLine(" ".join(peopleList))
 
-with CleanImporter('pyparsing'):
-    # pylint: disable-msg=E0602
-    lookAtPattern = Suppress(Optional(Keyword("at"))) + \
-                    object_pattern
+lookAtPattern = Suppress(Optional(Keyword("at"))) + object_pattern
 
 def lookDistributor(actor, text, info):
     try:
