@@ -137,6 +137,11 @@ class TestCreationhandler:
         self.ch.get_name("parrot")
         assert self.telnet.callback == self.ch.get_name
 
+    def test_get_name_deny_already_existing_name(self):
+        NamedObject._name_registry['foobar'] = None
+        self.ch.get_name("foobar")
+        assert self.telnet.callback == self.ch.get_name
+
 from grailmud.telnet import AvatarHandler
 from grailmud.objects import Player, NamedObject
 from grailmud.events import BaseEvent

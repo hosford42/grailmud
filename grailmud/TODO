@@ -32,6 +32,8 @@ prior art here; SQLAlchemy, SQLObject, ZCatalog, et al.
 
 * Case auditing in user commands, and possibly the use of a LoweredKeyDict.
 
+* Make rooms work.
+
 Just nice to have
 =================
 
