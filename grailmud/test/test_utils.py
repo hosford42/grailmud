@@ -210,3 +210,51 @@ class TestGetterFromRooms(SetupHelper):
         parseres = adjs_pattern.parseString("KILLER RABBIT")[0]
         res = get_from_rooms(parseres, [self.bogusroom, self.room], self.info)
         assert res is self.target
+
+from grailmud.utils import Matcher
+from pyparsing import ParseException
+
+def test_Matcher_passes_same_argument_to_matches():
+    class DummyPyparsingThingy:
+        def parseString(self, obj):
+            assert obj is sentinel
+    sentinel = object()
+    m = Matcher(sentinel)
+    m.match(DummyPyparsingThingy())
+
+def test_Matcher_match_returns_True_when_no_raise():
+    class DummyPyparsingThingy:
+        def parseString(self, obj):
+            pass
+    m = Matcher("foo")
+    assert m.match(DummyPyparsingThingy())
+
+def test_Matcher_match_sets_result_on_success():
+    sentinel = object()
+    class DummyPyparsingThingy:
+        def parseString(self, obj):
+            return sentinel
+    m = Matcher("foo")
+    m.match(DummyPyparsingThingy())
+    assert m.results is sentinel
+
+def test_Matcher_results_is_None_default():
+    assert Matcher('').results is None
+
+def test_Matcher_match_returns_False_on_ParseException():
+    class DummyPyparsingThingy:
+        def parseString(self, obj):
+            raise ParseException(None, None, None)
+    m = Matcher("foo")
+    assert not m.match(DummyPyparsingThingy())
+
+def test_Matcher_match_doesnt_touch_results_on_failure():
+    class DummyPyparsingThingy:
+        def parseString(self, obj):
+            raise ParseException(None, None, None)
+    sentinel = object()
+    m = Matcher("foo")
+    m.results = sentinel
+    m.match(DummyPyparsingThingy())
+    assert m.results is sentinel
+

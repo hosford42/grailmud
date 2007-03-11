@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 from grailmud.events import BaseEvent
 from grailmud.objects import MUDObject
 from grailmud.utils import promptcolour, get_from_rooms, \
-        defaultinstancevariable
+        defaultinstancevariable, Matcher
 from grailmud.rooms import UnfoundError
 from .core import object_pattern, shorttarget_pattern
 from .system import permissionDenied, badSyntax, unfoundObject
@@ -78,20 +78,6 @@ target_set_pattern = Suppress('set') + shorttarget_pattern + \
 target_clear_pattern = Suppress('clear') + shorttarget_pattern
 
 target_list_pattern = Suppress('list')
-
-class Matcher(object):
-
-    def __init__(self, text):
-        self.text = text
-        self.results = None
-
-    def match(self, pat):
-        try:
-            self.results = pat.parseString(self.text)
-        except ParseException:
-            return False
-        else:
-            return True
 
 def targetDistributor(actor, text, info):
     if info.instigator is not actor:

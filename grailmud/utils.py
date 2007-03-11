@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 
 import logging
 from grailmud.orderedset import OSet
+from pyparsing import ParseException
 
 def promptcolour(colourname = 'normal', chunk = False):
     """Eliminate some boilerplace for event text collapsers."""
@@ -203,4 +204,18 @@ def defaultinstancevariable(cls, name):
         setattr(cls, name, _DefaultInstanceVariable(name, fn))
         return fn
     return fngetter
+
+class Matcher(object):
+
+    def __init__(self, text):
+        self.text = text
+        self.results = None
+
+    def match(self, pat):
+        try:
+            self.results = pat.parseString(self.text)
+        except ParseException:
+            return False
+        else:
+            return True
 

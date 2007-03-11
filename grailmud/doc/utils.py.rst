@@ -71,3 +71,72 @@ variable works is that the object's class grows a descriptor which peeks into
 the object's ``__dict__``. If it finds a value under its key, it returns that.
 If not, it calls a specified function, sets the key in the ``__dict__`` to 
 that, and returns the computed value.
+
+The ``Matcher``
+------------------
+
+This helps remove some of the boilerplate from the parsing bit of actions. A 
+picture is worth a thousand words, so here's some code to illustrate its usage.
+
+``actiondefs/targetting.py@267``, before ``Matcher``::
+
+    def targetDistributor(actor, text, info):
+        if info.instigator is not actor:
+            permissionDenied(info.instigator)
+            return
+        try:
+            (name,), blob = target_set_pattern.parseString(text)
+        except ParseException:
+            pass
+        else:
+            try:
+                target = get_from_rooms(blob, [actor.inventory, actor.room], 
+                                        info)
+            except UnfoundError:
+                unfoundObject(actor)
+            else:
+                targetSet(actor, name.lower(), target)
+            return
+        try:
+            (name,), = target_clear_pattern.parseString(text)
+        except ParseException:
+            pass
+        else:
+            targetClear(actor, name.lower())
+            return
+        try:
+            target_list_pattern.parseString(text)
+        except ParseException:
+            pass
+        else:
+            targetList(actor)
+            return
+        badSyntax(actor)
+
+After ``Matcher`` (rev 289, if anyone cares)::
+
+    def targetDistributor(actor, text, info):
+        if info.instigator is not actor:
+            permissionDenied(info.instigator)
+            return
+
+        matcher = Matcher(text)
+
+        if matcher.match(target_set_pattern):
+            (name,), blob = matcher.results
+            try:
+                target = get_from_rooms(blob, [actor.inventory, actor.room], 
+                                        info)
+            except UnfoundError:
+                unfoundObject(actor)
+            else:
+                targetSet(actor, name.lower(), target)
+        elif matcher.match(target_clear_pattern):
+            (name,), = matcher.results
+            targetClear(actor, name.lower())
+        elif matcher.match(target_list_pattern):
+            targetList(actor)
+        else:
+            badSyntax(actor)
+
+Rather nicer, isn't it?
