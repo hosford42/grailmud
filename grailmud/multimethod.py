@@ -53,7 +53,10 @@ def _cooler_issubclass(child, parent):
     if isinstance(parent, tuple):
         parent = Union(*parent)
     if isinstance(parent, Not):
+        #pylint: disable-msg= E1103
+        #pylint's type inference chokes on the next line.
         return not _cooler_issubclass(child, parent.typ)
+        #pylint: enable-msg= E1103
     if isinstance(parent, Union):
         return any(_cooler_issubclass(child, typ) for typ in parent.types)
     if isinstance(parent, Intersection):
@@ -71,24 +74,32 @@ class Signature(object):
         self.tsig = tuple(tsig)
     
     def supertypes(self, other):
+        '''Returns True if our types supertype or are equal to the operand's
+        types.
+        '''
         if self.tsig == other.tsig:
             return True
         return self.strict_supertypes(other)
 
     def strict_supertypes(self, other):
+        '''Returns True if all of our types supertype the operand's types.
+        
+        This also returns True if only some do, and the rest are equal.
+        '''
         if len(self.tsig) != len(other.tsig):
             return False
 
         if self.tsig == other.tsig:
             return False
         
-        z = zip(self.tsig, other.tsig)
+        zipped_types = zip(self.tsig, other.tsig)
         #Is it just me, or is the argument order for issubclass completely
         #arbitrary? I've tripped up on that so many times - my preferred 
         #method of turning it into a Haskell style infix thingy and then 
         #reading it aloud ("b `issubclass` a") doesn't help. I think it ought 
         #to be renamed 'issubclassof' and the argument order reversed.
-        if all(_cooler_issubclass(theirs, ours) for ours, theirs in z):
+        if all(_cooler_issubclass(theirs, ours) 
+               for ours, theirs in zipped_types):
             return True
 
         return False
