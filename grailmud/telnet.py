@@ -121,6 +121,8 @@ class ConnectionHandler(object):
 NEW_CHARACTER = 1
 LOGIN = 2
 
+#XXX: this is reinventing the wheel. Should look into using formencode here.
+
 class NotAllowed(Exception):
     """The input was not acceptable, with an optional explanation."""
 
