@@ -10,18 +10,18 @@ completely as possible.
 
 * Test ``actiondefs/login.py`` and ``actiondefs/logoff.py`` a bit.
 
-* Go through the XXXes and TODOs in the code and organise them a bit, and list
-them here if they're major.
-
-* telnet.py doesn't close the connection correctly.
-
-* Turn some methods of Listeners which really ought to be events into (gasp!)
-events.
+* ``telnet.py`` doesn't close the connection correctly.
 
 * Logging in fails. Try it for yourself.
 
 For 0.2
 =======
+
+* Go through the ``XXX``es and ``TODO``s in the code and organise them a bit, 
+and list them here if they're major.
+
+* Turn some methods of ``Delegate``s which really ought to be events into 
+(gasp!) events.
 
 * A proper object relational integrity system, possibly with querying. There is
 prior art here; SQLAlchemy, SQLObject, ZCatalog, et al.
