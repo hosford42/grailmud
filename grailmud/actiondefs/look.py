@@ -25,7 +25,8 @@ from grailmud.rooms import UnfoundError
 from .system import unfoundObject
 from grailmud.objects import Player, TargettableObject, ExitObject, MUDObject
 from grailmud.strutils import capitalise
-from grailmud.utils import promptcolour, get_from_rooms, distributeEvent
+from grailmud.utils import promptcolour, get_from_rooms, distributeEvent, \
+        Matcher
 from grailmud.multimethod import Multimethod
 from pyparsing import ParseException, Suppress, Optional, Keyword
 
@@ -56,17 +57,18 @@ class LookRoomEvent(VisibleEvent):
 lookAtPattern = Suppress(Optional(Keyword("at"))) + object_pattern
 
 def lookDistributor(actor, text, info):
-    try:
-        blob, = lookAtPattern.parseString(text)
-    except ParseException:
-        lookRoom(actor)
-        return
-    try:
-        target = get_from_rooms(blob, [actor.inventory, actor.room], info)
-    except UnfoundError:
-        unfoundObject(actor)
+    matcher = Matcher(text)
+
+    if matcher.match(lookAtPattern):
+        blob, = matcher.results
+        try:
+            target = get_from_rooms(blob, [actor.inventory, actor.room], info)
+        except UnfoundError:
+            unfoundObject(actor)
+        else:
+            lookAt(actor, target)
     else:
-        lookAt(actor, target)
+        lookRoom(actor)
 
 lookAt = Multimethod()
 

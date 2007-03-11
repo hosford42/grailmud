@@ -26,7 +26,7 @@ from grailmud.cleanimporter import CleanImporter
 from grailmud.objects import MUDObject
 from grailmud.utils import defaultinstancevariable
 from .system import badSyntax
-from grailmud.utils import promptcolour
+from grailmud.utils import promptcolour, Matcher
 
 class DeafnessOnEvent(GameEvent):
 
@@ -62,22 +62,14 @@ syntaxmessage = "Use 'deaf on' to turn deafness on, or 'deaf off' to turn "\
                 "deafness off."
 
 def deafDistributor(actor, rest, lineinfo):
-    rest = rest.lower()
-    try:
-        on_pattern.parseString(rest)
-    except ParseException:
-        pass
-    else:
+    matcher = Matcher(rest.lower())
+    
+    if matcher.match(on_pattern):
         deafOn(actor)
-        return
-    try:
-        off_pattern.parseString(rest)
-    except ParseException:
-        pass
-    else:
+    elif matcher.match(off_pattern):
         deafOff(actor)
-        return
-    badSyntax(actor, syntaxmessage)
+    else:
+        badSyntax(actor, syntaxmessage)
 
 def deafOn(actor):
     if not actor.deaf:

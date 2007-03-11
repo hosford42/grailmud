@@ -25,7 +25,8 @@ from .system import unfoundObject, badSyntax
 from grailmud.rooms import UnfoundError
 from grailmud.strutils import capitalise, printable
 from grailmud.objects import MUDObject, TargettableObject
-from grailmud.utils import promptcolour, distributeEvent, get_from_rooms
+from grailmud.utils import promptcolour, distributeEvent, get_from_rooms, \
+        Matcher
 from grailmud.multimethod import Multimethod
 from pyparsing import ParseException, Suppress, Word
 
@@ -118,19 +119,19 @@ class SpeakToThirdEvent(AudibleEvent):
 speakToPattern = object_pattern + Suppress(',') + Word(printable)
 
 def speakToWrapper(actor, text, info):
-    try:
-        res = speakToPattern.parseString(text)
-        blob, saying = res
-    except ParseException:
+    matcher = Matcher(text)
+
+    if matcher.match(speakToPattern):
+        blob, saying = matcher.results
+        try:
+            target = get_from_rooms(blob, [actor.inventory, actor.room], info)
+        except UnfoundError:
+            unfoundObject(actor)
+        else:
+            speakTo(actor, target, saying)
+    else:
         badSyntax(actor, "Can't find the end of the target identifier. Use "
                          "',' at its end to specify it.")
-        return
-    try:
-        target = get_from_rooms(blob, [actor.inventory, actor.room], info)
-    except UnfoundError:
-        unfoundObject(actor)
-    else:
-        speakTo(actor, target, saying)
 
 def speak(actor, text):
     actor.receiveEvent(SpeakNormalFirstEvent(text))
