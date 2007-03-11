@@ -68,8 +68,6 @@ class LoggerIn(Telnet, LineOnlyReceiver):
         #errback.
         line = make_string_sane(line)
         meth = self.callback
-        logging.debug("Line %r received, putting %r for the ticker." %
-                      (line, meth))
         grailmud.instance.ticker.add_command(lambda: meth(line))
 
     def close(self):
