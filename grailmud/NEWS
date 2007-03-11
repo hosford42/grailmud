@@ -12,3 +12,6 @@ New in grailmud 0.1a3
 * Got object serialisation more-or-less working. Well, in a hackish sense.
 
 * 'listeners' have been renamed to 'delegates'.
+
+* A new tool in ``utils.py``, the ``Matcher`` class that abstracts away some of
+the fun of ParseExceptions.
