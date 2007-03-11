@@ -18,6 +18,8 @@ them here if they're major.
 * Turn some methods of Listeners which really ought to be events into (gasp!)
 events.
 
+* Logging in fails. Try it for yourself.
+
 For 0.2
 =======
 
