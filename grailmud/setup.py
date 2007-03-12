@@ -29,7 +29,7 @@ setup(name = "grailmud",
                       'doc': ['*.rst']},
 
 #      install_requires = ['durus>=3.6', 'pyparsing', 'twisted',
-#                          'functional', 'setuptools'],
+#                          'functional', 'setuptools', 'formencode'],
       extras_require = {'rest': ['docutils']},
 
       author = "Sam Pointon",

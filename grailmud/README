@@ -11,8 +11,8 @@ To install the package with all the defaults, execute::
 in the current directory.
 
 ``grailmud`` depends on several external packages: setuptools_,  Twisted_, 
-durus_, pyparsing_, and functional_. The latter four must be present for 
-normal operations; setuptools is only needed for installation.
+durus_, pyparsing_, formencode_, and functional_. The latter five must be 
+present for normal operations; setuptools is only needed for installation.
 
 In addition, docutils_ is used to produce a HTML-ified version of the docs. 
 This is not strictly needed; the docs are written in reST which is quite 
@@ -27,6 +27,7 @@ are needed to construct the images in the docs.
 .. _ImageMagick: http://www.imagemagick.org
 .. _graphviz: http://www.graphviz.org
 .. _functional: http://oakwinter.com/code/functional/
+.. _formencode: http://formencode.org
 
 Running ``grailmud``
 ====================
