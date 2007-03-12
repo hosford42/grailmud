@@ -38,7 +38,7 @@ tradition) to first-class objects which can be added or removed from objects
 at will. So if you want a staff to suddenly start acting like a goblin chief,
 it becomes as simple as this::
 
-    staff.addListener(GoblinChiefLogic())
+    staff.addDelegate(GoblinChiefLogic())
 
 rather than having to delve into the ``StaffObject``'s code and add the goblin
 logic in there.
