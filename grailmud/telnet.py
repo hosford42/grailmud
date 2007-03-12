@@ -37,6 +37,11 @@ import grailmud
 from grailmud.nvt import make_string_sane
 from functools import wraps
 from grailmud.utils import defaultinstancevariable
+from formencode import Invalid
+from formencode.validators import NotEmpty, MinLength, MaxLength, Int,\
+        FancyValidator, Wrapper
+from formencode.compound import All
+from string import lower
 
 #some random vaguely related TODOs:
 #-referential integrity when MUDObjects go POOF
@@ -119,42 +124,29 @@ class ConnectionHandler(object):
 NEW_CHARACTER = 1
 LOGIN = 2
 
-#XXX: this is reinventing the wheel. Should look into using formencode here.
-
-class NotAllowed(Exception):
-    """The input was not acceptable, with an optional explanation."""
-
-    def __init__(self, msg = "That input is invalid."):
-        self.msg = msg
-
-def toint(s):
-    """Convert s to an int, or throw a NotAllowed."""
-    try:
-        return int(s)
-    except ValueError:
-        raise NotAllowed("That couldn't be parsed as a number.")
-
-def strconstrained(blankallowed = False, corrector = sanitise,
-                   msg = 'Try actually writing something usable?'):
+def validate_input(*validators):
     """Decorator to ensure that the function is only called with acceptable
     input.
     """
-    def constrained(fn):
+    validator = All(*validators)
+    def constrainer(fn):
         @wraps(fn)
         def checker(self, line):
             logging.debug("Constraining input (%r) to %r" % (line, fn))
             try:
-                line = corrector(line.lower())
-            except NotAllowed, e:
-                logging.debug("NotAllowed caught, writing %s" % e.msg)
-                self.write(e.msg)
+                res = validator.to_python(line)
+            except Invalid, e:
+                logging.debug("Invalid writing %s" % str(e))
+                self.write(str(e))
             else:
-                if not blankallowed and not line:
-                    self.write(msg)
-                    return
-                return fn(self, line)
+                return fn(self, res)
         return checker
-    return constrained
+    return constrainer
+
+class LowerCase(FancyValidator):
+
+    def _to_python(self, value, state):
+        return value.lower()
 
 class ChoiceHandler(ConnectionHandler):
 
@@ -167,7 +159,7 @@ class ChoiceHandler(ConnectionHandler):
         self.setcallback(self.choice_made)
 
     #we want this here for normalisation purposes.
-    @strconstrained(corrector = toint)
+    @validate_input(Int())
     def choice_made(self, opt):
         """The user's made their choice, so we pick the appropriate route: we
         either create a new character, or log in as an old one.
@@ -198,12 +190,12 @@ class CreationHandler(ConnectionHandler):
         self.write("Enter your name.")
         self.setcallback(self.get_name)
 
-    @strconstrained(corrector = alphatise)
+    @validate_input(LowerCase(), Wrapper(to_python = alphatise), MinLength(3),
+                    MaxLength(12))
     def get_name(self, name):
         """The user's creating a new character. We've been given the name,
         so we ask for the password.
         """
-        name = name.lower()
         if name in NamedObject._name_registry or \
            name in CreationHandler.creating_right_now:
             self.write("That name is taken. Please use another.")
@@ -214,21 +206,18 @@ class CreationHandler(ConnectionHandler):
             self.setcallback(self.get_password)
             self.telnet.connection_lost_callback = self.unlock_name
 
+    @validate_input(Wrapper(to_python = safetise), MinLength(3))
     def get_password(self, line):
         """We've been given the password. Hash it, then store the hash.
         """
         #XXX: probably ought to salt, too.
-        line = safetise(line)
-        if len(line) <= 3:
-            self.write("That password is not long enough.")
-            return
         self.passhash = sha(line).digest()
         self.write("Please repeat your password.")
         self.setcallback(self.repeat_password)
 
+    @validate_input(Wrapper(to_python = safetise))
     def repeat_password(self, line):
         """Make sure the user can remember the password they've entered."""
-        line = safetise(line)
         if sha(line).digest() != self.passhash:
             self.write("Those passwords don't match. Please enter a new one.")
             self.setcallback(self.get_password)
@@ -236,7 +225,8 @@ class CreationHandler(ConnectionHandler):
             self.write("Enter your description (eg, 'short fat elf').")
             self.setcallback(self.get_sdesc)
 
-    @strconstrained(corrector = compose(sanitise, wsnormalise))
+    @validate_input(Wrapper(to_python = compose(sanitise, wsnormalise)), 
+                    NotEmpty())
     def get_sdesc(self, line):
         """Got the sdesc; ask for the adjectives."""
         self.sdesc = articleise(line)
@@ -245,8 +235,7 @@ class CreationHandler(ConnectionHandler):
                    "use your description.")
         self.setcallback(self.get_adjs)
 
-    @strconstrained(blankallowed = True,
-                    corrector = compose(alphatise, wsnormalise))
+    @validate_input(Wrapper(to_python = compose(alphatise, wsnormalise)))
     def get_adjs(self, line):
         """Got the adjectives; create the avatar and insert the avatar into
         the game.
@@ -277,12 +266,12 @@ class LoginHandler(ConnectionHandler):
         self.write("What is your name?")
         self.setcallback(self.get_name)
         
-    @strconstrained(corrector = alphatise)
+    @validate_input(Wrapper(to_python = compose(alphatise, lower, 
+                                                wsnormalise)))
     def get_name(self, line):
         """Logging in as an existing character, we've been given the name. We
         ask for the password next.
         """
-        line = line.lower()
         if Player.exists(line):
             self.name = line
             self.write("Please enter your password.\xff\xfa")
@@ -290,11 +279,11 @@ class LoginHandler(ConnectionHandler):
         else:
             self.write("That name is not recognised. Please try again.")
 
+    @validate_input(Wrapper(to_python = safetise))
     def get_password(self, line):
         """We've been given the password. Check that it's correct, and then
         insert the appropriate avatar into the MUD.
         """
-        line = safetise(line)
         passhash = sha(line).digest()
         try:
             avatar = Player.get(self.name, passhash)
@@ -317,8 +306,7 @@ class AvatarHandler(ConnectionHandler):
         self.connection_state.eventListenFlush(self.avatar)
         self.setcallback(self.handle_line)
 
-    @strconstrained(blankallowed = True,
-                    corrector = safetise)
+    @validate_input(Wrapper(to_python = safetise))
     def handle_line(self, line):
         logging.debug('%r received, handling in avatar.' % line)
         try:
