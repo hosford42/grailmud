@@ -31,11 +31,15 @@ from grailmud.utils import BothAtOnce
 #TODO: some sort of way to tell the classes not to pickle certain attributes.
 #XXX: need some sort of implementation for stateless, groupable objects.
 #XXX: the metaclass/class hierarchy is a bit fragile.
+#XXX: make the Object -> Delegate relationship a One-To-Many relationship, 
+#instead of Many-To-Many as it is now. This would require changing all the
+#function signatures.
 
 class MUDObject(BothAtOnce):
     """An object in the MUD."""
     
     def __init__(self, room):
+        super(MUDObject, self).__init__(room)
         self.room = room
         self.delegates = set()
         self.inventory = Room("A dummy inventory.", "This is a dummy "
@@ -110,12 +114,19 @@ class TargettableObject(MUDObject):
         """
         return self.adjs.issuperset(attrs)
 
-class NamealreadyUsedError(BaseException):
+class NamealreadyUsedError(Exception):
+    """The name is already in use for a NamedObject."""
     pass
 
 class NamedObject(TargettableObject):
+    """An object with a name. This is something of a difficult one, as it 
+    really should be closer to TargettableObject. But, they are different 
+    enough to warrant different classes.
+    """
 
     #XXX: make me a proper caseless dict?
+    #XXX: also, make this use the pie-in-the-sky referential integrity system
+    #once it's available.
     _name_registry = {}
     
     def __init__(self, sdesc, name, adjs, room):
@@ -159,7 +170,10 @@ class Player(NamedObject):
         """Receive a single line of input to process and act upon."""
         cmd, rest = head_word_split(line)
         logging.debug("cmd is %r." % cmd)
+        #pylint: disable-msg= E1101
+        #self.cmdict is a defaultinstancevariable defined in telnet.py
         func = self.cmdict[cmd.lower()]
+        #pylint: enable-msg= E1101
         logging.debug("Command found in cmdict, function is %r" % func)
         func(self, rest, info)
 
@@ -206,6 +220,10 @@ class ExitObject(MUDObject):
         super(ExitObject, self).__init__(room)
 
 class TargettableExitObject(ExitObject):
+    """An exit that can be specifically targetted.
+    
+    If exits are promoted to fully, wholly fledged first-class objects in the
+    MUD, this should inherit from TargettableObject."""
 
     def __init__(self, room, target_room, sdesc, adjs):
         self.sdesc = sdesc
@@ -216,5 +234,6 @@ class TargettableExitObject(ExitObject):
         return self.adjs.issuperset(adjs)
 
 class BadPassword(Exception):
+    """The password was wrong. This is tied to Player.get."""
     pass
 

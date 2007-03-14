@@ -23,6 +23,9 @@ class BaseEvent(object):
     '''The root of all events.'''
 
     def collapseToText(self, state, obj):
+        """Transform the event into text via the state. The obj is the object
+        that received the event in the first place.
+        """
         raise NotImplementedError("Base class.")
 
     def __eq__(self, other):
