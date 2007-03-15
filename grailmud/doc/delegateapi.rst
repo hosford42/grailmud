@@ -23,7 +23,7 @@ its delegates: this is that pass. There is no defined return value.
 -----------------
 
 This function takes no parameters. It signifies that the current 'batch' of 
-events are done (typically, one action is finished).
+events are done; presently, automatically at the end of every tick.
 
 Bits of the API that apply to ``MUDObjects``
 =============================================

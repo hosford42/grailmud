@@ -2,6 +2,11 @@
 Things what have happened
 ============================
 
+New in grailmud 0.1a4
+=====================
+
+* Cleaned up delegate API, with documentation.
+
 New in grailmud 0.1a3
 =====================
 

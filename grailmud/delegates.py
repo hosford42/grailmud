@@ -52,6 +52,8 @@ def chunked_event(self):
 class ConnectionState(Delegate):
     """Represents the state of the connection to the events as they collapse 
     to text."""
+    #TODO: slim me down to just the bare essentials, test me, then bulk back
+    #up with tests.
 
     _pickleme = False
 
@@ -149,6 +151,8 @@ class ConnectionState(Delegate):
 
     def event_flush(self):
         """Send off a final prompt to finish off the events."""
+        #XXX: now that this is being called automatically, a lot, this needs
+        #to be smarter about when it sends a prompt.
         logging.debug("Flushing the events, and stuff.")
         if self.want_prompt:
             self.sendPrompt()
