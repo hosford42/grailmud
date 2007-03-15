@@ -258,3 +258,57 @@ def test_Matcher_match_doesnt_touch_results_on_failure():
     m.match(DummyPyparsingThingy())
     assert m.results is sentinel
 
+from grailmud.utils import maybeinroom
+from grailmud.actiondefs.core import object_pattern
+from grailmud.rooms import AnonyRoom
+from grailmud.objects import TargettableObject, MUDObject
+
+class MockInfo:
+
+    def __init__(self, instigator):
+        self.instigator = instigator
+
+class Test_maybeinroom(SetupHelper):
+
+    def setUp(self):
+        self.room = AnonyRoom()
+        self.target = TargettableObject('a killer rabbit', set(['killer',
+                                                                'rabbit']),
+                                        self.room)
+        self.actor = MUDObject(self.room)
+        self.setup_for_object(self.actor)
+        self.setup_for_object(self.target)
+        self.goodblob, = object_pattern.parseString('killer rabbit')
+        self.badblob, = object_pattern.parseString("bogus bunny")
+        self.info = MockInfo(self.actor)
+
+    def test_calls_on_success(self):
+        called = []
+        def on_success(res):
+            called.append(True)
+        def on_failure():
+            assert False
+        maybeinroom(self.goodblob, [self.room], self.info, on_success, 
+                    on_failure)
+        assert len(called) == 1
+
+    def test_passes_target_on_success(self):
+        called = []
+        def on_success(res):
+            called.append(res)
+        def on_failure():
+            assert False
+        maybeinroom(self.goodblob, [self.room], self.info, on_success,
+                    on_failure)
+        assert called == [self.target]
+
+    def test_calls_on_failure(self):
+        called = []
+        def on_failure():
+            called.append(True)
+        def on_success(res):
+            print res
+            assert False
+        maybeinroom(self.badblob, [self.room], self.info, on_success,
+                    on_failure)
+        assert len(called) == 1

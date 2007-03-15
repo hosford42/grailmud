@@ -25,6 +25,8 @@ import logging
 from grailmud.orderedset import OSet
 from pyparsing import ParseException
 
+#XXX: the room-extraction functions ought to be extracted to rooms.py
+
 def promptcolour(colourname = 'normal', chunk = False):
     """Eliminate some boilerplace for event text collapsers."""
     def fngrabber(func):
@@ -219,3 +221,11 @@ class Matcher(object):
         else:
             return True
 
+def maybeinroom(blob, rooms, info, on_success, on_failure):
+    from grailmud.rooms import UnfoundError
+    try:
+        res = get_from_rooms(blob, rooms, info)
+    except UnfoundError:
+        on_failure()
+    else:
+        on_success(res)
