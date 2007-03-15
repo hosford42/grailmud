@@ -303,7 +303,6 @@ class AvatarHandler(ConnectionHandler):
         self.avatar.addDelegate(self.connection_state)
         self.avatar.room.add(self.avatar)
         login(self.avatar)
-        self.connection_state.eventListenFlush(self.avatar)
         self.setcallback(self.handle_line)
 
     @validate_input(Wrapper(to_python = safetise))
@@ -312,7 +311,6 @@ class AvatarHandler(ConnectionHandler):
         try:
             self.avatar.receivedLine(line,
                                      LineInfo(instigator = self.avatar))
-            self.avatar.eventFlush()
         except:
             logging.error('Unhandled error %e, closing session.')
             logoffFinal(self.avatar)

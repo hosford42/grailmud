@@ -28,26 +28,10 @@ class Delegate(object):
 
     _pickleme = True
 
-    def __init__(self):
-        self.delegating = set()
+    def delegate_event(self, event):
+        raise NotImplementedError()
 
-    def register(self, source):
-        """Register ourselves as a delegate."""
-        self.delegating.add(source)
-
-    def unregister(self, source):
-        """Unregister ourselves as a delegate."""
-        self.delegating.remove(source)
-
-    def disconnecting(self, source):
-        '''Acknowledge that an object has disconnected.'''
-        source.removeDelegate(self)
-
-    def transferControl(self, source, new):
-        source.removeDelegate(self)
-        new.addDelegate(self)
-
-    def delegateToEvent(self, obj, event):
+    def event_flush(self):
         raise NotImplementedError()
 
 @defaultinstancevariable(Player, "more_limiter")
@@ -61,6 +45,9 @@ def chunks(self):
 @defaultinstancevariable(Player, "chunked_event")
 def chunked_event(self):
     return None
+
+#XXX: this, too, is a schizophrenic class, but the delegate part of it is so
+#small (negligible?) that I don't think splitting it is really worthwhile.
 
 class ConnectionState(Delegate):
     """Represents the state of the connection to the events as they collapse 
@@ -148,7 +135,7 @@ class ConnectionState(Delegate):
         self.forcePrompt()
         self.forceNewline()
 
-    def delegateToEvent(self, obj, event):
+    def delegate_event(self, event):
         """Collapse an event to text."""
         logging.debug("Handling event %r." % event)
         event.collapseToText(self, self.avatar)
@@ -160,7 +147,7 @@ class ConnectionState(Delegate):
             self.target = self.telnet
             displayMore(self.avatar)
 
-    def eventListenFlush(self, obj):
+    def event_flush(self):
         """Send off a final prompt to finish off the events."""
         logging.debug("Flushing the events, and stuff.")
         if self.want_prompt:
@@ -169,6 +156,7 @@ class ConnectionState(Delegate):
         self.nonce = {}
 
     def disconnecting(self, obj):
+        #XXX: old method. This should be tripped by a LogoffFirst event.
         if obj is self.avatar:
             #our avatar is disconnecting: we need to tell our telnet to close.
             #self.delegating may be mutated by the delegateees removal
@@ -181,7 +169,3 @@ class ConnectionState(Delegate):
             #the removeDelegate of our avatar, which would blow up.
             Delegate.disconnecting(self, obj)
 
-    def transferControl(self, source, other):
-        if source is self.avatar:
-            self.avatar = other
-        Delegate.transferControl(self, source, other)

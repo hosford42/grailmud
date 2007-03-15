@@ -49,7 +49,7 @@ class MUDObject(BothAtOnce):
     def eventFlush(self):
         """Tell the delegates that the current lot of events are done."""
         for delegate in self.delegates:
-            delegate.eventListenFlush(self)
+            delegate.event_flush()
 
     def addDelegate(self, delegate):
         """Register a new delegate.
@@ -58,7 +58,6 @@ class MUDObject(BothAtOnce):
         if delegate in self.delegates:
             raise ValueError("Delegate is already delegating.")
         self.delegates.add(delegate)
-        delegate.register(self)
 
     def removeDelegate(self, delegate):
         """Remove a delegate. Throws errors if it's not currently delegating.
@@ -66,22 +65,6 @@ class MUDObject(BothAtOnce):
         if delegate not in self.delegates:
             raise ValueError("Delegate is not delegating.")
         self.delegates.remove(delegate)
-        delegate.unregister(self)
-
-    #XXX: these two methods should be reimplemented as events.
-    def transferControl(self, obj):
-        """Utility method to shift all the delegates to another object."""
-        for delegate in self.delegates:
-            delegate.transferControl(self, obj)
-
-    def disconnect(self):
-        '''Notify the delegates that this object is being disconnected.
-
-        Note that this only makes sense for Players, but it needs to be on
-        here else AttributeErrors will start flying around. I think. So we
-        just ignore it.
-        '''
-        pass
 
     def __getstate__(self):
         delegates = set(delegate for delegate in self.delegates
@@ -99,7 +82,7 @@ def receiveEvent(self, event):
     This is the very basic handler for objects that can be delegateed to.
     """
     for delegate in self.delegates:
-        delegate.delegateToEvent(self, event)
+        delegate.delegate_event(event)
 
 class TargettableObject(MUDObject):
     """A tangible object, that can be generically targetted."""

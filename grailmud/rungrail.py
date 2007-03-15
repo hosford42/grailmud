@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 
 from durus.file_storage import FileStorage
 from durus.connection import Connection
-from grailmud.server import ConnectionFactory, commit_gameworld
+from grailmud.server import ConnectionFactory, commit_gameworld, event_flusher
 from twisted.internet import reactor
 import sys
 import logging
@@ -42,6 +42,7 @@ def run_mud(mud, port):
     """Run the MUD factory."""
     reactor.listenTCP(port, mud)
     mud.ticker.add_command(commit_gameworld)
+    mud_ticker.add_command(event_flusher)
     mud.ticker.start()
     logging.info("OK, setup done, handing you over to the reactor's loop!")
     sys.stdout.write("Server is up and running.")

@@ -191,10 +191,8 @@ class TestAvatarHandler:
         called = []
         self.avatar.receivedLine = (lambda line, info: 
                                             called.append(('rl', line, info)))
-        self.avatar.eventFlush = lambda: called.append(('ef',))
         self.ah.handle_line('foo')
-        assert called == [('rl', 'foo', LineInfo(instigator = self.avatar)),
-                          ('ef',)]
+        assert called == [('rl', 'foo', LineInfo(instigator = self.avatar))]
 
     def test_handle_line_removing_bad_characters(self):
         lines = []

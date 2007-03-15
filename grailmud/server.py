@@ -77,3 +77,24 @@ def commit_gameworld():
                       "reactor.")
         reactor.stop()
         raise
+
+def event_flusher():
+    #the current batch of events is over, so flush anything out. This largely
+    #involves sending prompts and such.
+    try:
+        for obj in MUDObject._instances:
+            obj.eventFlush()
+    finally:
+        try:
+            grailmud.instance.ticker.add_command(flusher)
+        except BaseException, e:
+            logging.error("event_flusher experienced an error re-adding itself"
+                          " to the commands queue. Stopping the reactor.")
+            logging.error("If there was an error in an eventFlush call and we "
+                          "get here and reraise, the previous error poofs, "
+                          "but if we don't reraise here, our error poofs. "
+                          "Compromise: write our error to the log and don't "
+                          "reraise.")
+            import sys, cgitb
+            logging.error(cgitb.text(sys.exc_info()))
+            reactor.stop()

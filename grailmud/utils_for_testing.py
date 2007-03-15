@@ -21,31 +21,16 @@ from grailmud.objects import MUDObject
 
 class MockDelegate(object):
 
-    def __init__(self, obj = None):
+    def __init__(self, obj):
         self.received = []
         self.flushed = False
-        if obj is not None:
-            self.obj = obj
-            self.obj.delegate = self
+        self.obj = obj
+        self.obj.delegate = self
 
-    def register(self, obj):
-        if hasattr(self, 'obj'):
-            assert obj is self.obj
-            assert self in obj.delegates
-        else:
-            self.obj = obj
-            obj.delegate = self
-
-    def unregister(self, obj):
-        assert obj is self.obj
-        assert self not in obj.delegates
-
-    def delegateToEvent(self, obj, event):
-        assert obj is self.obj
+    def delegate_event(self, event):
         self.received.append(event)
 
-    def eventListenFlush(self, obj):
-        assert obj is self.obj
+    def event_flush(self):
         self.flushed = True
 
 class SetupHelper(object):
@@ -53,7 +38,7 @@ class SetupHelper(object):
     def setup_for_object(self, obj):
         if hasattr(self, 'room'):
             self.room.add(obj)
-        obj.delegate = MockDelegate()
+        obj.delegate = MockDelegate(obj)
         obj.addDelegate(obj.delegate)
 
     def setUp(self):
